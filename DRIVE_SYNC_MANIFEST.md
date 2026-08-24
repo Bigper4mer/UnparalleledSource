@@ -1,18 +1,18 @@
 # UNPS HiveForge — Drive to GitHub Sync Manifest
 
-Version: 1.1.0  
+Version: 1.2.0  
 Updated: 2026-08-24  
 GitHub repository: `Bigper4mer/UnparalleledSource`  
 Canonical internal source: `PROMPTS.UNPS`  
-Published public release: `v0.5.0`
+Production release line: `v0.5.0`
 
 ## Purpose
 
-Record the public-safe subset of the canonical Drive library mirrored into GitHub. Drive remains the internal source of truth; GitHub provides a portable, reviewable, and cloneable agent package.
+Record the public-safe subset of the canonical Drive library mirrored into GitHub. Drive remains the internal source of truth; GitHub provides a portable, reviewable, cloneable and user-guided agent package.
 
 ## Published package
 
-The complete 13-file HiveForge package is mirrored under:
+The complete HiveForge package is mirrored under:
 
 `10_CUSTOM_AGENTS/UNPS_HiveForge/`
 
@@ -30,9 +30,26 @@ The complete 13-file HiveForge package is mirrored under:
 - `INSTALL.md`
 - `CHANGELOG.md`
 
+## Guided user experience
+
+The public distribution also contains a complete beginner-to-expert onboarding surface:
+
+- `docs/GETTING_STARTED.md` — discovery → installation → intake → first verified task
+- `docs/USER_INTAKE.md` — safe user working-profile and learning workflow
+- `docs/WORKFLOW_GUIDE.md` — recommended workflows, inputs and starter prompts
+- `docs/COMMAND_REFERENCE.md` — all shipped CLI/runtime commands plus conversation modes
+- `docs/TOOLING_GUIDE.md` — capability maturity, selection order and setup snippets
+- `docs/TOOLJET_SETUP.md` — optional shared ToolJet Agent & Capability Registry cockpit
+- `docs/TROUBLESHOOTING.md` — practical installation/runtime/routing/tool troubleshooting
+- `examples/FIRST_RUN_PROMPT.md` — copy/paste startup prompt
+- `examples/USER_PROFILE_TEMPLATE.md` — human-readable working-preference template
+- `examples/PROJECT_INTAKE_TEMPLATE.md` — project/source-of-truth intake template
+
+The Production gate treats these files as required release support assets.
+
 ## Published support files
 
-The mirror also includes public-safe files referenced by the package:
+The mirror also includes public-safe reusable framework assets referenced by the package:
 
 - Library README, index, and bootstrap
 - File-routing and human-readable workspace standard
@@ -61,20 +78,21 @@ The mirror also includes public-safe files referenced by the package:
 - `dashboard/` — local Agent Command Center, runtime telemetry, approvals, and connector health
 - `.github/workflows/production-gate.yml` — cross-platform Production CI gate
 - `.github/workflows/release.yml` — automatic immutable tag/archive/checksum/release publication after a green `main` gate
-- `scripts/production_gate.py` — package/version/status/privacy/secret regression guard
+- `scripts/production_gate.py` — package/version/status/onboarding/privacy/secret regression guard
 - `scripts/build_release.sh` — deterministic public release archive + `SHA256SUMS`
 - `tests/` — install, dashboard, fallback, Graphify, and package round-trip smoke tests
 - `.gitattributes` — deterministic LF line endings for Windows/WSL-sensitive files
 
 ## Public/private audit
 
-The v0.5.0 public distribution was reviewed for known client/opportunity identifiers and common credential/private-key patterns. CI repeats these scans on every release commit.
+The v0.5.0 public distribution is reviewed for known client/opportunity identifiers and common credential/private-key patterns. CI repeats these scans on every release commit.
 
 ## Validation
 
-| Check | v0.5.0 result |
+| Check | v0.5.0 requirement/result |
 |---|---|
-| HiveForge package files | PASS — 13/13 |
+| HiveForge package files | PASS |
+| Guided onboarding support files | Required by Production gate |
 | Empty package files | PASS — 0 |
 | Version consistency | PASS — 0.5.0 |
 | Production status consistency | PASS |
@@ -103,4 +121,4 @@ The GitHub mirror does not contain:
 
 ## Synchronization rule
 
-Material internal changes must be reviewed for public suitability before GitHub synchronization. Do not automate blind publication from Drive. Update package versions and changelogs when behavior changes, then re-run credential, privacy, install, and acceptance gates before publishing.
+Material internal changes must be reviewed for public suitability before GitHub synchronization. Do not automate blind publication from Drive. Update package versions and changelogs when behavior changes, then re-run credential, privacy, install, onboarding and acceptance gates before publishing.
