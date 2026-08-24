@@ -1,39 +1,29 @@
 # UNPS HiveForge
 
-> The Unparalleled Source agent foundry: a portable control plane for prompts, skills, workflows, connectors, dependencies, evaluations, and deployable Custom Agents.
+> The Unparalleled Source agent foundry: a portable control plane for prompts, skills, workflows, connectors, dependencies, evaluations, onboarding, and deployable Custom Agents.
 
-**Version:** 0.5.0  
+**Version:** 0.6.0  
 **Status:** Production  
 **Canonical workspace:** `PROMPTS.UNPS`
 
-## New user start
+## Start here
 
-Install and verify:
+New users should begin with:
+
+1. `docs/GETTING_STARTED.md`
+2. `docs/USER_INTAKE.md`
+3. `docs/WORKFLOW_GUIDE.md`
+4. `docs/COMMAND_REFERENCE.md`
+
+Fast path after installation:
 
 ```bash
-HIVEFORGE_REF=v0.5.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.5.0/install.sh | sh
-
 hiveforge doctor
 hiveforge version
-hiveforge bootstrap
+hiveforge onboard
 ```
 
-Then follow the repository's guided onboarding:
-
-- [`docs/GETTING_STARTED.md`](../../docs/GETTING_STARTED.md) — discovery → install → intake → first task
-- [`docs/USER_INTAKE.md`](../../docs/USER_INTAKE.md) — safe user/profile learning
-- [`docs/WORKFLOW_GUIDE.md`](../../docs/WORKFLOW_GUIDE.md) — recommended workflows and inputs
-- [`docs/COMMAND_REFERENCE.md`](../../docs/COMMAND_REFERENCE.md) — complete shell/runtime command reference
-- [`docs/TOOLING_GUIDE.md`](../../docs/TOOLING_GUIDE.md) — tools, dependencies, maturity and routing
-- [`docs/TOOLJET_SETUP.md`](../../docs/TOOLJET_SETUP.md) — optional shared team cockpit
-- [`examples/FIRST_RUN_PROMPT.md`](../../examples/FIRST_RUN_PROMPT.md) — copy/paste first-run prompt
-
-## What it does
-
-HiveForge performs the Prompt Database Agent role while presenting a stronger UNPS product identity. It keeps the UNPS Agent Engineering Library useful as a living operating system, inventories and normalizes reusable assets, prevents duplication, routes project files correctly, composes specialized Custom Agent packages, applies evaluation gates, and promotes only patterns proven through real work.
-
-Public framework: [github.com/Bigper4mer/UnparalleledSource](https://github.com/Bigper4mer/UnparalleledSource)
+`hiveforge onboard` prints a copy/paste prompt for the first agent session. It asks HiveForge to learn only useful work preferences, inspect the current project/source of truth, recommend the smallest useful workflow, execute a real task, verify it, and capture only durable learning.
 
 ## Optimized startup
 
@@ -42,53 +32,97 @@ BRAIN.md
   → AGENT.md
   → SYSTEM_INSTRUCTIONS.md
   → PACKAGE_MANIFEST.md
-  → validated user/project context
+  → validated user working profile when relevant
+  → current project/source of truth
   → task-specific workflow
   → required skills/connectors/dependencies/schema
 ```
 
 Only the first four package files belong in normal startup context. Everything else loads through progressive disclosure.
 
-## Recommended first-run behavior
+## User context and learning
 
-A new HiveForge user should be guided through:
+HiveForge keeps three scopes separate:
 
-```mermaid
-flowchart LR
-    A[Verify package] --> B[Learn working preferences]
-    B --> C[Inspect current project]
-    C --> D[Identify source of truth]
-    D --> E[Recommend workflow]
-    E --> F[Execute one real task]
-    F --> G[Verify]
-    G --> H[Capture validated learning]
+```text
+USER
+  role · goals · domain experience · working preferences · tool preferences
+
+PROJECT
+  client/internal scope · source of truth · decisions · status · project learnings
+
+TASK
+  goal · workflow · evidence · execution · verification
 ```
 
-User-level preferences and project/client facts remain separate. Secrets and sensitive personal information do not belong in reusable profile or learning files.
+Durable learning moves upward cautiously:
+
+```text
+task → project → user/account → reusable skill/workflow → BRAIN
+```
+
+Never store passwords, API keys, auth tokens, regulated data, unrelated sensitive personal information, or one-off project exceptions as reusable user-profile data.
 
 ## Agent Command Center
+
+The public distribution includes a localhost-only operations dashboard:
 
 ```bash
 hiveforge dashboard
 hiveforge run --task "Prompt library health check" -- your-command
 ```
 
-It reports run status, elapsed time, heartbeat, pending approvals, recent runs, and connector health without storing command output, prompt bodies, or secrets.
+It reports run status, elapsed time, heartbeat, approvals, recent runs, and connector health without storing prompt bodies, command output, credentials, or arbitrary environment variables.
+
+## Guided commands
+
+```text
+hiveforge onboard
+hiveforge docs
+hiveforge profile-init [PATH]
+hiveforge project-init [PATH]
+```
+
+Core runtime commands:
+
+```text
+hiveforge doctor
+hiveforge bootstrap
+hiveforge dashboard
+hiveforge run
+hiveforge status
+hiveforge start
+hiveforge event
+hiveforge finish
+hiveforge approval
+hiveforge decide
+hiveforge connector
+```
+
+Optional ToolJet evaluation commands:
+
+```text
+hiveforge tooljet status
+hiveforge tooljet config
+hiveforge tooljet up
+hiveforge tooljet url
+hiveforge tooljet down
+```
 
 ## Package contents
 
 | File | Purpose |
 |---|---|
-| `BRAIN.md` | Model-agnostic orchestration and routing contract |
-| `AGENT.md` | Identity, mission, responsibilities, and maturity |
+| `BRAIN.md` | Model-agnostic orchestration, routing, user-context and learning contract |
+| `AGENT.md` | Identity, mission, responsibilities and maturity |
 | `SYSTEM_INSTRUCTIONS.md` | Persistent operating policy |
-| `PACKAGE_MANIFEST.md` | Startup, shared references, and integrity rules |
+| `PACKAGE_MANIFEST.md` | Startup, shared references and integrity rules |
 | `SKILLS.md` | Task-to-skill routing |
 | `WORKFLOWS.md` | Task-to-workflow routing |
 | `MCP_PREFERENCES.md` | Connector selection and fallback order |
 | `DEPENDENCIES.md` | Core and conditional runtime requirements |
-| `OUTPUT_SCHEMAS.md` | Maintenance, asset, and validation contracts |
-| `TOOL_POLICY.md` | Authorization, evidence, security, and mutation boundaries |
+| `OUTPUT_SCHEMAS.md` | Maintenance, asset and validation contracts |
+| `TOOL_POLICY.md` | Authorization, evidence, security and mutation boundaries |
 | `INSTALL.md` | Connected and portable deployment |
 | `CHANGELOG.md` | Version history |
 
@@ -96,52 +130,58 @@ It reports run status, elapsed time, heartbeat, pending approvals, recent runs, 
 
 ```text
 request
-  → resolve user/project/client scope
-  → inspect existing state
-  → classify task and depth
+  → understand user/task
+  → resolve client/project scope
+  → inspect source of truth
+  → classify depth
   → retrieve minimum evidence
-  → select workflow and skills
-  → execute with authorized tools
+  → recommend/select workflow
+  → load only required skills/tools
+  → execute
   → verify
-  → route and document
-  → capture durable learning at the correct scope
+  → route/document
+  → capture durable learning
 ```
 
 ## Capability maturity
 
-HiveForge distinguishes `CORE`, `CANDIDATE`, `STAGED`, `REFERENCE`, `RESTRICTED`, and `DEPRECATED` dependencies. Optional capabilities do not become package requirements merely because they are available.
+HiveForge distinguishes `CORE`, `CANDIDATE`, `STAGED`, `REFERENCE`, `RESTRICTED`, and `DEPRECATED` dependencies.
 
 Current examples:
 
-- Graphify — Candidate repository intelligence, with live v0.9.48 integration evidence.
+- Graphify — Candidate repository intelligence with live `0.9.48` integration evidence.
 - yt-dlp — Candidate media ingestion; youtube-dl is compatibility reference only.
 - Composio — Staged external action/tool layer.
 - LangGraph — Staged durable orchestration.
 - ToolJet — Staged human operations cockpit and Agent & Capability Registry.
 
-## Context efficiency
-
-- Search before creating.
-- Reference shared assets instead of copying them.
-- Convert heavyweight text sources once for repeated use while preserving authoritative originals.
-- Prefer deterministic tools and targeted retrieval before expensive model escalation.
-- Use Graphify only when repository complexity justifies building a graph.
-- Prefer native/connected tools before adding another external dependency.
+Optional capabilities do not become core requirements merely because they are available.
 
 ## Production validation
 
-HiveForge v0.5.0 earned Production status through the automated `.github/workflows/production-gate.yml` release gate. The validated release line covers:
+HiveForge v0.6.0 extends the hardened v0.5.0 control plane with guided onboarding. The production gate validates:
 
 - package/version/status consistency;
 - public/private and secret scans;
-- fresh Linux, macOS, and WSL installs;
+- onboarding documentation presence and safety boundaries;
+- executable onboarding CLI behavior;
+- user-profile and project-intake creation/no-overwrite behavior;
+- ToolJet Compose configuration;
+- fresh Linux, macOS and WSL installs;
 - dashboard health smoke test;
-- live Graphify v0.9.48 fixture extraction and clustering;
+- live Graphify fixture extraction and clustering;
 - fallback without Graphify;
 - package export/import round trips;
-- three-workflow acceptance evidence.
+- acceptance evidence.
 
-Optional capabilities can remain Candidate/Staged without blocking the core package when fallback behavior is verified.
+## Distribution
+
+```bash
+HIVEFORGE_REF=v0.6.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh | sh
+```
+
+Release artifacts include SHA-256 checksums.
 
 ---
 
