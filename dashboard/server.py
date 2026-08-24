@@ -35,7 +35,7 @@ def safe_file(root: pathlib.Path, relative: str) -> pathlib.Path | None:
 
 
 class DashboardHandler(BaseHTTPRequestHandler):
-    server_version = "HiveForge/0.5"
+    server_version = "HiveForge/0.6"
 
     def send_json(self, payload: dict, status: HTTPStatus = HTTPStatus.OK) -> None:
         body = json.dumps(payload).encode("utf-8")
@@ -72,7 +72,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_json(state)
             return
         if path == "/api/health":
-            self.send_json({"status": "ok", "version": "0.5.0"})
+            self.send_json({"status": "ok", "version": "0.6.0"})
             return
         if path in {"/", "/index.html"}:
             target = STATIC_ROOT / "index.html"
