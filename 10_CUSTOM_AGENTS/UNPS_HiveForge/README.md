@@ -3,7 +3,7 @@
 > The Unparalleled Source agent foundry: a portable control plane for prompts, skills, workflows, connectors, dependencies, evaluations, and deployable Custom Agents.
 
 **Version:** 0.5.0  
-**Status:** Release Candidate  
+**Status:** Production  
 **Canonical workspace:** `PROMPTS.UNPS`
 
 ## What it does
@@ -74,7 +74,7 @@ HiveForge distinguishes `CORE`, `CANDIDATE`, `STAGED`, `REFERENCE`, `RESTRICTED`
 
 Current examples:
 
-- Graphify — Candidate repository intelligence.
+- Graphify — Candidate repository intelligence, with live v0.9.48 integration evidence.
 - yt-dlp — Candidate media ingestion; youtube-dl is compatibility reference only.
 - Composio — Staged external action/tool layer.
 - LangGraph — Staged durable orchestration.
@@ -91,23 +91,22 @@ Current examples:
 
 ## Production validation
 
-The v0.5.0 release gate is automated under `.github/workflows/production-gate.yml` and covers:
+HiveForge v0.5.0 earned Production status through the automated `.github/workflows/production-gate.yml` release gate. The validated release line covers:
 
-- package/version consistency;
+- package/version/status consistency;
 - public/private and secret scans;
-- Linux and macOS fresh installs;
-- WSL validation when the runner exposes WSL;
+- fresh Linux, macOS, and WSL installs;
 - dashboard health smoke test;
-- live Graphify fixture test;
+- live Graphify v0.9.48 fixture extraction and clustering;
 - fallback without Graphify;
-- package export/import round trip;
+- package export/import round trips;
 - three-workflow acceptance evidence.
 
-Production promotion requires all mandatory gates to pass. Optional capabilities can remain Candidate/Staged without blocking the core package when fallback behavior is verified.
+Optional capabilities can remain Candidate/Staged without blocking the core package when fallback behavior is verified.
 
 ## Distribution
 
-For a released immutable tag:
+For the immutable release tag:
 
 ```bash
 HIVEFORGE_REF=v0.5.0 \
