@@ -101,13 +101,14 @@ jobs:
           python-version: '3.12'
       - name: Install exact Graphify candidate
         run: python -m pip install --disable-pip-version-check graphifyy==0.9.48
-      - name: Build live graph from code-only fixture
+      - name: Build and cluster live graph from code-only fixture
         shell: bash
         run: |
           set -euo pipefail
           graphify --version
           cd tests/fixtures/graphify-smoke
           timeout 180 graphify .
+          timeout 180 graphify cluster-only .
           test -s graphify-out/graph.json
           test -s graphify-out/GRAPH_REPORT.md
           test -s graphify-out/graph.html
@@ -115,9 +116,11 @@ jobs:
           import json
           from pathlib import Path
           data = json.loads(Path('graphify-out/graph.json').read_text())
+          edges = data.get('links', data.get('edges', []))
           assert len(data.get('nodes', [])) >= 3, data
-          assert len(data.get('links', data.get('edges', []))) >= 1, data
-          print('Graphify live fixture: PASS')
+          assert len(edges) >= 1, data
+          assert 'UserService' in Path('graphify-out/GRAPH_REPORT.md').read_text() or len(data['nodes']) >= 3
+          print(f"Graphify live fixture: PASS — {len(data['nodes'])} nodes, {len(edges)} edges")
           PY
 
   wsl-install:
@@ -126,10 +129,24 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate WSL and install
+      - name: Ensure Ubuntu WSL distribution exists
         shell: pwsh
         run: |
           wsl --status
-          $workspace = (wsl wslpath -a "$env:GITHUB_WORKSPACE").Trim()
+          $distros = @(wsl --list --quiet | ForEach-Object { ($_ -replace "`0", "").Trim() } | Where-Object { $_ })
+          if ($distros.Count -eq 0) {
+            Write-Host "No WSL distribution is preinstalled; attempting Ubuntu installation."
+            wsl --install -d Ubuntu --no-launch
+          }
+          $distros = @(wsl --list --quiet | ForEach-Object { ($_ -replace "`0", "").Trim() } | Where-Object { $_ })
+          if ($distros.Count -eq 0) { throw "WSL is enabled but no Linux distribution could be installed on this runner." }
+          Write-Host "Using WSL distribution: $($distros[0])"
+      - name: Install HiveForge inside WSL
+        shell: pwsh
+        run: |
+          $distros = @(wsl --list --quiet | ForEach-Object { ($_ -replace "`0", "").Trim() } | Where-Object { $_ })
+          $distro = $distros[0]
+          wsl -d $distro --user root -- bash -lc "true"
+          $workspace = (wsl -d $distro --user root -- wslpath -a "$env:GITHUB_WORKSPACE").Trim()
           if (-not $workspace) { throw "Unable to resolve WSL workspace path" }
-          wsl bash -lc "cd '$workspace' && HIVEFORGE_SOURCE_DIR='$workspace' sh install.sh --target /tmp/hiveforge --bin-dir /tmp/hiveforge-bin && /tmp/hiveforge-bin/hiveforge doctor && /tmp/hiveforge-bin/hiveforge version | grep -qx 0.5.0"
+          wsl -d $distro --user root -- bash -lc "cd '$workspace' && HIVEFORGE_SOURCE_DIR='$workspace' sh install.sh --target /tmp/hiveforge --bin-dir /tmp/hiveforge-bin && /tmp/hiveforge-bin/hiveforge doctor && /tmp/hiveforge-bin/hiveforge version | grep -qx 0.5.0"
