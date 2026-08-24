@@ -1,0 +1,135 @@
+name: Production Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'release/**'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-gate:
+    name: Static / Privacy / Secret Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run deterministic production gate
+        run: python scripts/production_gate.py
+      - name: Compile Python
+        run: python -m compileall -q dashboard scripts tests
+      - name: Validate POSIX shell syntax
+        run: |
+          sh -n install.sh
+          sh -n bin/hiveforge
+          sh -n tests/package_export_import.sh
+          sh -n tests/fallback_without_graphify.sh
+          sh -n scripts/build_release.sh
+
+  fresh-install:
+    name: Fresh Install (${{ matrix.os }})
+    needs: static-gate
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install from checked-out source
+        shell: bash
+        run: |
+          set -euo pipefail
+          HIVEFORGE_SOURCE_DIR="$GITHUB_WORKSPACE" sh install.sh \
+            --target "$RUNNER_TEMP/hiveforge" \
+            --bin-dir "$RUNNER_TEMP/bin"
+          "$RUNNER_TEMP/bin/hiveforge" doctor
+          test "$("$RUNNER_TEMP/bin/hiveforge" version)" = "0.5.0"
+          "$RUNNER_TEMP/bin/hiveforge" bootstrap >/dev/null
+
+  package-roundtrip:
+    name: Package Export / Import (${{ matrix.os }})
+    needs: static-gate
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run round-trip test
+        shell: bash
+        run: sh tests/package_export_import.sh
+
+  dashboard-smoke:
+    name: Dashboard Smoke
+    needs: static-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Health endpoint smoke test
+        run: python tests/dashboard_smoke.py
+
+  fallback-without-graphify:
+    name: Fallback Without Graphify
+    needs: static-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify optional dependency fallback
+        run: sh tests/fallback_without_graphify.sh
+
+  graphify-live:
+    name: Graphify Live Fixture
+    needs: static-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact Graphify candidate
+        run: python -m pip install --disable-pip-version-check graphifyy==0.9.48
+      - name: Build live graph from code-only fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          graphify --version
+          cd tests/fixtures/graphify-smoke
+          timeout 180 graphify .
+          test -s graphify-out/graph.json
+          test -s graphify-out/GRAPH_REPORT.md
+          test -s graphify-out/graph.html
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('graphify-out/graph.json').read_text())
+          assert len(data.get('nodes', [])) >= 3, data
+          assert len(data.get('links', data.get('edges', []))) >= 1, data
+          print('Graphify live fixture: PASS')
+          PY
+
+  wsl-install:
+    name: Fresh Install (WSL)
+    needs: static-gate
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate WSL and install
+        shell: pwsh
+        run: |
+          wsl --status
+          $workspace = (wsl wslpath -a "$env:GITHUB_WORKSPACE").Trim()
+          if (-not $workspace) { throw "Unable to resolve WSL workspace path" }
+          wsl bash -lc "cd '$workspace' && HIVEFORGE_SOURCE_DIR='$workspace' sh install.sh --target /tmp/hiveforge --bin-dir /tmp/hiveforge-bin && /tmp/hiveforge-bin/hiveforge doctor && /tmp/hiveforge-bin/hiveforge version | grep -qx 0.5.0"
