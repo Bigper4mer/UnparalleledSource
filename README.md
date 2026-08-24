@@ -4,8 +4,8 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-0.4.0-C35BA3?style=for-the-badge)](#release-status)
-[![Status](https://img.shields.io/badge/status-candidate-4B0F4E?style=for-the-badge)](#release-status)
+[![Version](https://img.shields.io/badge/version-0.5.0-C35BA3?style=for-the-badge)](#release-status)
+[![Status](https://img.shields.io/badge/status-release%20candidate-4B0F4E?style=for-the-badge)](#release-status)
 [![Architecture](https://img.shields.io/badge/architecture-model--agnostic-00D4AA?style=for-the-badge)](#architecture)
 [![Built by UNPS](https://img.shields.io/badge/built%20by-Unparalleled%20Source-080210?style=for-the-badge)](https://unparalleledsource.com)
 
@@ -129,39 +129,42 @@ A production-oriented HiveForge agent should contain or reference:
 | `INSTALL.md` | Deployment and validation |
 | `CHANGELOG.md` | Material version history |
 
+## Capability maturity
+
+HiveForge keeps optional technology separate from core behavior. Dependencies are classified as `CORE`, `CANDIDATE`, `STAGED`, `REFERENCE`, `RESTRICTED`, or `DEPRECATED`.
+
+- **Graphify** — Candidate repository intelligence.
+- **yt-dlp** — Candidate media ingestion; `youtube-dl` is reference/compatibility only.
+- **Composio** — Staged external action/tool layer.
+- **LangGraph** — Staged durable orchestration.
+- **ToolJet** — Staged human operations cockpit and Agent & Capability Registry.
+
+The core package must remain usable when any optional Candidate/Staged capability is absent.
+
 ## Quick start
 
-This repository now includes the complete public-safe HiveForge agent package and the shared files required to deploy it. The live UNPS Drive library remains canonical for internal operations and future synchronization.
+This repository includes the public-safe HiveForge agent package and shared files required to deploy it. The live UNPS Drive library remains canonical for internal operations and future synchronization.
 
-### One-command install
+### Immutable release install
+
+After the `v0.5.0` tag is published:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/main/install.sh | sh
+HIVEFORGE_REF=v0.5.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.5.0/install.sh | sh
 ```
 
-Then print the ready-to-use agent boot sequence:
+Then:
 
 ```bash
+hiveforge doctor
 hiveforge bootstrap
-```
-
-Open the built-in live operations dashboard:
-
-```bash
 hiveforge dashboard
 ```
 
-Run a command with live telemetry:
+Release archives include `SHA256SUMS` so downloaded artifacts can be verified before use.
 
-```bash
-hiveforge run --task "Prompt library health check" -- sh -c 'sleep 8'
-```
-
-The Command Center refreshes every two seconds and displays current status,
-elapsed time, heartbeat, recent runs, pending approvals, and connector health.
-It binds to `127.0.0.1` by default, stores only sanitized local run metadata, and
-requires no database, JavaScript package manager, or cloud service. Python 3 is
-required only for dashboard and telemetry commands.
+The Command Center binds to `127.0.0.1` by default, stores sanitized local run metadata, and requires no database or cloud service. Python 3 is required only for dashboard and telemetry commands.
 
 The installer uses no root privileges, validates all 13 package files, and refuses to overwrite an existing installation unless `--force` is explicitly supplied.
 
@@ -170,7 +173,24 @@ The installer uses no root privileges, validates all 13 package files, and refus
 3. Load the four-file startup set.
 4. Connect approved tools using least privilege.
 5. Validate the build against [schemas/agent-package.schema.json](schemas/agent-package.schema.json).
-6. Run the [acceptance evaluation](09_TESTS_EVALS/Prompt_Tests/PROMPT_DATABASE_AGENT_ACCEPTANCE_EVAL.md) before Production promotion.
+6. Run the [acceptance evaluation](09_TESTS_EVALS/Prompt_Tests/PROMPT_DATABASE_AGENT_ACCEPTANCE_EVAL.md).
+7. Review the [v0.5.0 production evidence](09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md).
+
+## Production gate
+
+The release candidate is tested by `.github/workflows/production-gate.yml` for:
+
+- package and version consistency;
+- public/private boundary and secret scanning;
+- fresh Linux and macOS installs;
+- WSL install validation when WSL is available on the Windows runner;
+- dashboard health endpoint;
+- Graphify live fixture extraction;
+- fallback behavior with Graphify absent;
+- package export/import round trip;
+- three-workflow acceptance evidence.
+
+The tag/release workflow builds a versioned archive and SHA-256 checksum file. A tag is not considered Production unless all mandatory gates are green.
 
 ## Repository layout
 
@@ -179,7 +199,7 @@ The installer uses no root privileges, validates all 13 package files, and refus
 03_SKILLS/                          Required reusable capabilities
 04_MCP_CONNECTORS/                  Connector and model/harness routing
 05_WORKFLOWS/                       Control-plane and workspace workflows
-06_DEPENDENCIES/                    Optional repository-intelligence capability
+06_DEPENDENCIES/                    Dependency maturity and optional capabilities
 09_TESTS_EVALS/                     Acceptance and regression gates
 10_CUSTOM_AGENTS/UNPS_HiveForge/    Complete 13-file agent package
 assets/                             Branded README imagery
@@ -188,6 +208,8 @@ dashboard/                          Local Command Center and telemetry runtime
 docs/                               Public architecture and roadmap
 examples/                           Portable manifest example
 schemas/                            Machine-readable package contract
+scripts/                            Production/release tooling
+tests/                              Portable smoke and round-trip tests
 install.sh                          One-command installer
 ```
 
@@ -205,12 +227,10 @@ See [DRIVE_SYNC_MANIFEST.md](DRIVE_SYNC_MANIFEST.md) for the published scope and
 
 ## Release status
 
-**Current release:** `0.4.0`<br>
-**Maturity:** Candidate
+**Target release:** `0.5.0`  
+**Current maturity:** Release Candidate
 
-The framework is deployment-ready for controlled UNPS use. Production promotion remains gated on repeated acceptance passes across materially different workflows. Optional repository-intelligence integrations remain Candidate until their live promotion tests succeed.
-
-See the [roadmap](docs/ROADMAP.md) for the next gates.
+Production is reached only after mandatory release-gate checks pass and the immutable `v0.5.0` tag is created. Optional integrations can remain Candidate/Staged without blocking the core package when their absence is handled safely.
 
 ## Public/private boundary
 
@@ -224,6 +244,10 @@ This public repository documents the framework and safe examples. It does not pu
 - hidden operational memory.
 
 Read [SECURITY.md](SECURITY.md) before contributing an integration or agent package.
+
+## License
+
+Copyright © 2026 Unparalleled Source. The repository is publicly viewable, but no permission to copy, modify, redistribute, sublicense, or commercially exploit the code or content is granted except by a separate written license. See [LICENSE](LICENSE).
 
 ---
 
