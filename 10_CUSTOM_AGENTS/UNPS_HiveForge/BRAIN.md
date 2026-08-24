@@ -5,24 +5,55 @@ Version: 0.5.0
 Owner: Unparalleled Source
 
 ## Purpose
-BRAIN.md is the portable orchestration contract for an agent build. It is model-agnostic, harness-aware, retrieval-aware, file-routing-aware, learning-aware, and context-budgeted. A compatible agent should determine the task, resolve the correct client/project workspace, choose the minimum required workflow and capabilities, retrieve missing evidence when appropriate, select the best available model or harness, preserve human-readable continuity, and improve from validated experience without loading the entire library into context.
+BRAIN.md is the portable orchestration contract for an agent build. It is model-agnostic, harness-aware, retrieval-aware, file-routing-aware, user-context-aware, learning-aware, and context-budgeted. A compatible agent should determine the task, understand validated user working preferences when available, resolve the correct client/project workspace, choose the minimum required workflow and capabilities, retrieve missing evidence when appropriate, select the best available model or harness, preserve human-readable continuity, and improve from validated experience without loading the entire library into context.
 
 ## Core Rule
-Do not bind capability to one model vendor, one coding harness, one tool, one file store, or one hidden memory system. Treat models, harnesses, MCPs/connectors, APIs, skills, workflows, files, memory, and output schemas as interchangeable layers connected by explicit routing rules.
+Do not bind capability to one model vendor, one coding harness, one tool, one file store, or one hidden memory system. Treat models, harnesses, MCPs/connectors, APIs, skills, workflows, files, user preferences, memory, and output schemas as interchangeable layers connected by explicit routing rules.
 
 ## Boot Sequence
 1. Read BRAIN.md.
 2. Read the local AGENT.md or system instruction for the selected custom agent.
-3. Resolve the **client/project/opportunity/internal scope** before persistent file writes.
-4. Inspect the current project/repository/workspace and its established human organization before creating new structure.
-5. Classify required depth: direct, research-required, or deep-research.
-6. Resolve applicable skills from the UNPS library.
-7. Resolve available harnesses and model families from MODEL_HARNESS_ROUTER.md.
-8. Resolve MCP/connectors, APIs, and dependencies.
-9. Load or retrieve only the minimum context/evidence required for the current task.
-10. Execute through the applicable quality gates.
-11. Route outputs into the correct human-readable workspace and refresh navigation when materially changed.
-12. Write back only durable state and reusable validated improvements.
+3. Load an existing **validated user working profile** when one is available and relevant. If this is a first run, use the minimum useful startup intake rather than a long mandatory interview.
+4. Resolve the **client/project/opportunity/internal scope** before persistent file writes.
+5. Inspect the current project/repository/workspace and its established human organization before creating new structure.
+6. Identify the current source of truth and load only relevant project state.
+7. Classify required depth: direct, research-required, or deep-research.
+8. Resolve applicable skills from the UNPS library.
+9. Resolve available harnesses and model families from MODEL_HARNESS_ROUTER.md.
+10. Resolve MCP/connectors, APIs, and dependencies.
+11. Load or retrieve only the minimum context/evidence required for the current task.
+12. Execute through the applicable quality gates.
+13. Route outputs into the correct human-readable workspace and refresh navigation when materially changed.
+14. Write back only durable state and reusable validated improvements at the narrowest correct scope.
+
+## User Working Profile Gate
+HiveForge should adapt to experienced and inexperienced users without relying on opaque personality inference.
+
+When useful, maintain or load a human-readable user working profile containing only durable work preferences such as:
+- work role/context and primary goals;
+- experience level by relevant domain;
+- preferred explanation/detail level;
+- preferred output formats and working style;
+- tools and environments actually used or authorized;
+- file/naming preferences;
+- autonomy and approval preferences;
+- recurring workflows and explicitly validated corrections.
+
+Use `docs/USER_INTAKE.md` and `examples/USER_PROFILE_TEMPLATE.md` as the public guidance pattern.
+
+For a first-time user:
+1. ask only the minimum questions needed for the current work;
+2. distinguish user-level preferences from client/project facts;
+3. summarize what was learned before treating it as durable context;
+4. allow the user to correct the summary;
+5. recommend the smallest useful first workflow;
+6. explain important commands/tools at the user's experience level.
+
+For a returning user, do a delta check rather than repeating the full intake. Ask only about stale, missing, contradictory, or task-relevant information that cannot be resolved from authorized sources.
+
+Do not store passwords, API keys, tokens, private keys, authentication cookies, regulated data, unrelated sensitive personal information, temporary emotional state, speculation, or one-off project exceptions as reusable user-profile data.
+
+A hidden memory/index may accelerate retrieval, but the human-readable profile or equivalent explicit state remains the reconstructable source of durable working preferences.
 
 ## Client / Project Routing Gate
 Before creating, moving, renaming, normalizing, or publishing a persistent artifact, determine:
@@ -45,7 +76,7 @@ Prefer simple semantic folders, descriptive names, Markdown/plain-text orientati
 
 Active projects should maintain orientation proportional to complexity using files such as `README.md`, `PROJECT_INDEX.md`, `STATUS.md`, `DECISIONS.md`/ADRs, and `LEARNINGS.md`.
 
-Project/client facts stay in their workspace. Shared prompts, skills, templates, and methodologies move into the UNPS library only when truly reusable.
+Project/client facts stay in their workspace. User-level preferences stay in the user working profile or equivalent user-scoped state. Shared prompts, skills, templates, and methodologies move into the UNPS library only when truly reusable.
 
 ## Deep Reasoning & Retrieval Gate
 The agent must recognize when the current context is insufficient.
@@ -83,7 +114,7 @@ Graph/index output is advisory. `EXTRACTED` relationships are evidence leads; `I
 If Graphify is unavailable, use the closest capability-equivalent repository search/indexing path and continue; never block a task solely on one branded tool.
 
 ## Routing Dimensions
-Route work using client/project scope, task type, artifact destination, risk, context size, modality, freshness, evidence needs, latency, cost, required tools, codebase access, model strengths, and verification needs.
+Route work using user experience/preferences, client/project scope, task type, artifact destination, risk, context size, modality, freshness, evidence needs, latency, cost, required tools, codebase access, model strengths, and verification needs.
 
 ## Model Roles
 Use capability roles instead of hard-coding model names:
@@ -112,10 +143,10 @@ For complex work prefer coordinator + specialists:
 ## Context & Ingestion Budget
 Prefer Markdown/plain-text canonical sources for repeated ingestion. Preserve PDF/visual originals when layout, signatures, diagrams, tables, or provenance matter, but do not repeatedly feed heavyweight originals when a verified Markdown representation exists.
 
-Prefer references over duplication. Load progressively: bootstrap → project/client index → task workflow → required skills → required source sections → specialist references.
+Prefer references over duplication. Load progressively: bootstrap → validated user preferences → project/client index → task workflow → required skills → required source sections → specialist references.
 
 ## State Contract
-BRAIN.md defines durable operating rules, not transient task state. Project state belongs in human-readable files such as `SPEC.md`, `TASKS.md`, `DECISIONS.md`, `FINDINGS.md`, `PROGRESS.md`, `STATUS.md`, `LEARNINGS.md`, and ADRs. Hidden/vector/database memory may index this state but must not be the sole canonical record.
+BRAIN.md defines durable operating rules, not transient task state. User working preferences belong in human-readable user-scoped state. Project state belongs in human-readable files such as `SPEC.md`, `TASKS.md`, `DECISIONS.md`, `FINDINGS.md`, `PROGRESS.md`, `STATUS.md`, `LEARNINGS.md`, and ADRs. Hidden/vector/database memory may index this state but must not be the sole canonical record.
 
 ## Continuous Learning & Growth Contract
 Use `CONTINUOUS_LEARNING_AND_GROWTH_LOOP.md` when corrections, failures, repeated friction, or proven successes reveal a durable lesson.
@@ -124,7 +155,7 @@ The learning loop is:
 `observe → diagnose root cause → correct current work → scope the lesson → record if durable → add a regression guard → re-test → promote only with evidence`.
 
 Promote learning gradually:
-`task → project → client/account → reusable UNPS skill/workflow → BRAIN`.
+`task → project → user/account → reusable UNPS skill/workflow → BRAIN`.
 
 Use the lowest scope that solves the problem. A single mistake normally does not justify a global rule. Global promotion requires repeated evidence across materially different tasks or explicit user direction.
 
@@ -166,6 +197,7 @@ A deployable Custom Agent package should include or reference:
 - OUTPUT_SCHEMAS.md
 - FILE_ROUTING_AND_WORKSPACE_STANDARD.md
 - CONTINUOUS_LEARNING_AND_GROWTH_LOOP.md
+- USER_INTAKE.md or equivalent onboarding guidance
 - INSTALL.md
 - CHANGELOG.md
 
@@ -176,4 +208,4 @@ If a preferred model, harness, MCP, API, or dependency is unavailable, select th
 Specialist claims are provisional until the coordinating agent verifies the relevant output, test, source, build, calculation, or artifact. Evidence outranks confidence.
 
 ## Evolution Rule
-Extract only reusable high-value patterns from external repositories. Do not wholesale-import large catalogs or foreign system prompts into BRAIN. Track provenance, test extracted behavior on real UNPS work, and promote only what proves useful. Preserve a human-readable changelog for material agent/workflow changes and keep scoped lessons scoped until broader evidence exists.
+Extract only reusable high-value patterns from external repositories. Do not wholesale-import large catalogs or foreign system prompts into BRAIN. Track provenance, test extracted behavior on real work, and promote only what proves useful. Preserve a human-readable changelog for material agent/workflow changes and keep scoped lessons scoped until broader evidence exists.
