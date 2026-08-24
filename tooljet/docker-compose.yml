@@ -1,0 +1,13 @@
+services:
+  tooljet:
+    image: tooljet/try:ee-lts-latest
+    container_name: hiveforge-tooljet
+    restart: unless-stopped
+    platform: linux/amd64
+    ports:
+      - "8080:80"
+    volumes:
+      - tooljet_data:/var/lib/postgresql/13/main
+
+volumes:
+  tooljet_data:
