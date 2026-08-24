@@ -165,7 +165,7 @@ def check_optional_fallback_contract() -> None:
     deps = read(PACKAGE / "DEPENDENCIES.md")
     if "If Graphify is unavailable" not in brain:
         fail("BRAIN missing Graphify fallback contract")
-    if "Graphify repository intelligence" not in deps or "CANDIDATE" not in deps:
+    if "graphifyy==0.9.48" not in deps or "CANDIDATE" not in deps:
         fail("dependency policy does not keep Graphify optional/candidate")
     print("PASS: optional dependency fallback contract")
 
