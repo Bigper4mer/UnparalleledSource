@@ -36,6 +36,16 @@ REQUIRED_SUPPORT_FILES = [
     "06_DEPENDENCIES/Python/CLI_Tools/Media_Ingestion/MEDIA_INGESTION_TOOLING.md",
     "05_WORKFLOWS/Agent_Control_Plane/TOOLJET_AGENT_CAPABILITY_REGISTRY.md",
     "09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md",
+    "docs/GETTING_STARTED.md",
+    "docs/USER_INTAKE.md",
+    "docs/WORKFLOW_GUIDE.md",
+    "docs/COMMAND_REFERENCE.md",
+    "docs/TOOLING_GUIDE.md",
+    "docs/TOOLJET_SETUP.md",
+    "docs/TROUBLESHOOTING.md",
+    "examples/FIRST_RUN_PROMPT.md",
+    "examples/USER_PROFILE_TEMPLATE.md",
+    "examples/PROJECT_INTAKE_TEMPLATE.md",
 ]
 
 SECRET_PATTERNS = {
@@ -70,7 +80,7 @@ def check_package_files() -> None:
         read(PACKAGE / name)
     for name in REQUIRED_SUPPORT_FILES:
         read(ROOT / name)
-    print("PASS: required package/support files")
+    print("PASS: required package/support/onboarding files")
 
 
 def check_versions() -> None:
@@ -108,6 +118,29 @@ def check_production_status() -> None:
     if "**Current maturity:** Production" not in root_readme:
         fail("root README is not marked Production")
     print("PASS: production status synchronized")
+
+
+def check_onboarding_surface() -> None:
+    root_readme = read(ROOT / "README.md")
+    package_readme = read(PACKAGE / "README.md")
+    required_root_links = [
+        "docs/GETTING_STARTED.md",
+        "docs/USER_INTAKE.md",
+        "docs/WORKFLOW_GUIDE.md",
+        "docs/COMMAND_REFERENCE.md",
+        "docs/TOOLING_GUIDE.md",
+        "docs/TOOLJET_SETUP.md",
+        "examples/FIRST_RUN_PROMPT.md",
+    ]
+    for link in required_root_links:
+        if link not in root_readme:
+            fail(f"root README missing onboarding link: {link}")
+    if "docs/GETTING_STARTED.md" not in package_readme:
+        fail("package README does not route new users to Getting Started")
+    intake = read(ROOT / "docs" / "USER_INTAKE.md")
+    if "Do not" not in intake or "password" not in intake.lower():
+        fail("user intake guide lacks explicit sensitive-data boundary")
+    print("PASS: guided onboarding surface")
 
 
 def iter_text_files():
@@ -194,6 +227,7 @@ def main() -> int:
     check_package_files()
     check_versions()
     check_production_status()
+    check_onboarding_surface()
     check_temp_artifacts()
     check_secrets()
     check_public_boundary()
