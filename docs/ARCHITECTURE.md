@@ -34,6 +34,26 @@ flowchart TD
 | Output schema | Deliverable structure and required evidence | Unsupported claims |
 | Evaluation | Acceptance tests and regression guards | Self-certified confidence |
 | Project state | Status, decisions, findings, progress | Global behavior rules |
+| Command Center | Sanitized run telemetry and operator approvals | Prompt content, credentials, or authoritative business records |
+
+## Runtime observability
+
+The built-in Command Center uses a dependency-free local runtime for immediate
+deployment. Instrumented commands and external agent hosts emit lifecycle events
+to a bounded JSON state store. The localhost dashboard reads that store every two
+seconds and exposes session-token-protected approval decisions.
+
+```mermaid
+flowchart LR
+    A["Agent or command"] --> R["HiveForge runtime"]
+    R --> S["Bounded state store"]
+    S --> D["Local Command Center"]
+    D --> R
+```
+
+This presentation layer can later be replaced by ToolJet and PostgreSQL without
+changing the event vocabulary: started, progress, heartbeat, approval requested,
+approval decided, completed, and failed.
 
 ## Progressive disclosure
 
@@ -90,4 +110,3 @@ observe
 Learning moves upward gradually:
 
 `task → project → client/account → reusable UNPS asset → Brain`
-

@@ -2,7 +2,7 @@
 
 > The Unparalleled Source agent foundry: a portable control plane for prompts, skills, workflows, connectors, dependencies, evaluations, and deployable Custom Agents.
 
-**Version:** 0.3.1  
+**Version:** 0.4.0  
 **Status:** Deployment-ready Candidate  
 **Canonical workspace:** `PROMPTS.UNPS`
 

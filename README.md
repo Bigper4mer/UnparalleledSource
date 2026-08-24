@@ -4,14 +4,14 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-0.3.1-C35BA3?style=for-the-badge)](#release-status)
+[![Version](https://img.shields.io/badge/version-0.4.0-C35BA3?style=for-the-badge)](#release-status)
 [![Status](https://img.shields.io/badge/status-candidate-4B0F4E?style=for-the-badge)](#release-status)
 [![Architecture](https://img.shields.io/badge/architecture-model--agnostic-00D4AA?style=for-the-badge)](#architecture)
 [![Built by UNPS](https://img.shields.io/badge/built%20by-Unparalleled%20Source-080210?style=for-the-badge)](https://unparalleledsource.com)
 
 **Turn proven work into reusable intelligence—and reusable intelligence into deployable agents.**
 
-[Architecture](docs/ARCHITECTURE.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+[Architecture](docs/ARCHITECTURE.md) · [Command Center](docs/COMMAND_CENTER.md) · [Roadmap](docs/ROADMAP.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 </div>
 
@@ -145,6 +145,24 @@ Then print the ready-to-use agent boot sequence:
 hiveforge bootstrap
 ```
 
+Open the built-in live operations dashboard:
+
+```bash
+hiveforge dashboard
+```
+
+Run a command with live telemetry:
+
+```bash
+hiveforge run --task "Prompt library health check" -- sh -c 'sleep 8'
+```
+
+The Command Center refreshes every two seconds and displays current status,
+elapsed time, heartbeat, recent runs, pending approvals, and connector health.
+It binds to `127.0.0.1` by default, stores only sanitized local run metadata, and
+requires no database, JavaScript package manager, or cloud service. Python 3 is
+required only for dashboard and telemetry commands.
+
 The installer uses no root privileges, validates all 13 package files, and refuses to overwrite an existing installation unless `--force` is explicitly supplied.
 
 1. Open the [complete HiveForge package](10_CUSTOM_AGENTS/UNPS_HiveForge/README.md).
@@ -166,6 +184,7 @@ The installer uses no root privileges, validates all 13 package files, and refus
 10_CUSTOM_AGENTS/UNPS_HiveForge/    Complete 13-file agent package
 assets/                             Branded README imagery
 bin/                                HiveForge launcher
+dashboard/                          Local Command Center and telemetry runtime
 docs/                               Public architecture and roadmap
 examples/                           Portable manifest example
 schemas/                            Machine-readable package contract
@@ -186,7 +205,7 @@ See [DRIVE_SYNC_MANIFEST.md](DRIVE_SYNC_MANIFEST.md) for the published scope and
 
 ## Release status
 
-**Current release:** `0.3.1`<br>
+**Current release:** `0.4.0`<br>
 **Maturity:** Candidate
 
 The framework is deployment-ready for controlled UNPS use. Production promotion remains gated on repeated acceptance passes across materially different workflows. Optional repository-intelligence integrations remain Candidate until their live promotion tests succeed.

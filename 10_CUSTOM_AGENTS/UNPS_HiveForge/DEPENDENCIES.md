@@ -1,6 +1,6 @@
 # UNPS HiveForge — Dependencies
 
-Version: 0.3.0  
+Version: 0.4.0  
 Status: Candidate
 
 ## Core
@@ -17,6 +17,7 @@ The core curation and routing behavior has no mandatory Python or Node package d
 | Capability | Dependency | Policy |
 |---|---|---|
 | Connected Drive maintenance | Authorized Google Drive/Workspace connector | Use least privilege |
+| Local Command Center | Python 3.9+ standard library | Optional; required only for dashboard and telemetry commands |
 | Repository work | Git client and repository-aware coding harness | Project dependent |
 | Graphify repository intelligence | Python 3.10+, `graphifyy==0.9.48` | Candidate; install only when justified |
 | NetworkX graph consumption | Compatible Python and NetworkX runtime | Optional |

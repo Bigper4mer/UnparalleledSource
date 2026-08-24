@@ -14,6 +14,8 @@ done
 script_dir=$(CDPATH= cd -- "$(dirname -- "$resolved_path")" && pwd)
 install_root=$(CDPATH= cd -- "$script_dir/.." && pwd)
 agent_root="$install_root/10_CUSTOM_AGENTS/UNPS_HiveForge"
+runtime_script="$install_root/dashboard/runtime.py"
+dashboard_server="$install_root/dashboard/server.py"
 
 required_files="
 README.md
@@ -64,6 +66,31 @@ version() {
   awk '/^version:/ { print $2; exit }' "$agent_root/AGENT.md"
 }
 
+require_python() {
+  command -v python3 >/dev/null 2>&1 || {
+    echo "HiveForge Command Center requires Python 3." >&2
+    exit 1
+  }
+}
+
+runtime() {
+  require_python
+  [ -f "$runtime_script" ] || {
+    echo "Missing HiveForge runtime: $runtime_script" >&2
+    exit 1
+  }
+  python3 "$runtime_script" "$@"
+}
+
+dashboard() {
+  require_python
+  [ -f "$dashboard_server" ] || {
+    echo "Missing HiveForge dashboard: $dashboard_server" >&2
+    exit 1
+  }
+  python3 "$dashboard_server" "$@"
+}
+
 usage() {
   cat <<'EOF'
 UNPS HiveForge
@@ -71,6 +98,15 @@ UNPS HiveForge
 Usage:
   hiveforge doctor      Validate the installed agent package.
   hiveforge bootstrap   Print the startup paths and ready-to-use boot sequence.
+  hiveforge dashboard   Open the local Agent Command Center.
+  hiveforge run         Run a command with live dashboard telemetry.
+  hiveforge status      Show current or most recent run status.
+  hiveforge start       Start an externally instrumented run.
+  hiveforge event       Record a run phase and safe summary.
+  hiveforge finish      Complete an externally instrumented run.
+  hiveforge approval    Request an operator decision for a run.
+  hiveforge decide      Approve or deny a pending decision.
+  hiveforge connector   Report connector health.
   hiveforge path        Print the installation directory.
   hiveforge version     Print the installed agent version.
   hiveforge help        Show this help.
@@ -80,6 +116,10 @@ EOF
 case "${1:-help}" in
   doctor) doctor ;;
   bootstrap) bootstrap ;;
+  dashboard) shift; dashboard "$@" ;;
+  run|status|start|event|finish|approval|decide|connector)
+    runtime "$@"
+    ;;
   path) printf '%s\n' "$install_root" ;;
   version|--version|-v) version ;;
   help|--help|-h) usage ;;
@@ -89,4 +129,3 @@ case "${1:-help}" in
     exit 2
     ;;
 esac
-

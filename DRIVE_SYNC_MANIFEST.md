@@ -51,6 +51,7 @@ The mirror also includes the public-safe files referenced by the package:
 
 - `install.sh` — non-root, one-command installer with atomic staging and recoverable backups
 - `bin/hiveforge` — launcher for validation, version, path, and bootstrap commands
+- `dashboard/` — local Agent Command Center, runtime telemetry, approvals, and connector health
 
 ## Validation
 

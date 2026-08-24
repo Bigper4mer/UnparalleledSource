@@ -2,6 +2,19 @@
 
 All material package changes are recorded here. Dates use `YYYY-MM-DD`.
 
+## 0.4.0 — 2026-08-24
+
+### Added
+
+- Built-in HiveForge Command Center.
+- Dependency-free local run telemetry, heartbeat, approvals, and connector health.
+- `dashboard`, `run`, `status`, `start`, `event`, `finish`, `approval`, `decide`, and `connector` commands.
+
+### Security
+
+- Dashboard binds to localhost by default.
+- Telemetry stores sanitized run metadata, not command output, prompt content, or credentials.
+
 ## 0.3.1 — 2026-08-24
 
 ### Added

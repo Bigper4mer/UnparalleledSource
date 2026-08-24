@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080210">
+    <title>HiveForge Command Center</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="Command Center navigation">
+        <a class="brand" href="#command-center" aria-label="UNPS HiveForge home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span><b>UNPS</b><strong>HiveForge</strong></span>
+        </a>
+        <nav>
+          <a class="active" href="#command-center"><span aria-hidden="true">⌘</span>Command Center</a>
+          <a href="#runs"><span aria-hidden="true">▷</span>Runs</a>
+          <a href="#approvals"><span aria-hidden="true">✓</span>Approvals</a>
+          <a href="#connectors"><span aria-hidden="true">↗</span>Connectors</a>
+        </nav>
+        <div class="operator"><span class="operator-avatar">B.B.</span><span>Operator<br><b>UNPS</b></span></div>
+      </aside>
+
+      <main id="command-center">
+        <header class="topbar">
+          <div>
+            <h1>HiveForge Command Center</h1>
+            <p>Live execution, approvals, and connector health</p>
+          </div>
+          <div class="system-health"><span id="system-dot"></span><span id="system-label">Checking runtime…</span></div>
+        </header>
+
+        <section class="live-run" aria-labelledby="live-heading">
+          <div class="live-copy">
+            <p class="section-label">Live run status</p>
+            <div class="status-line"><span id="live-dot" class="live-dot"></span><h2 id="live-heading">OFFLINE</h2></div>
+            <h3 id="task-name">No HiveForge run has been recorded</h3>
+            <p class="phase">Phase: <strong id="run-phase">Ready for instrumentation</strong></p>
+            <div class="metrics">
+              <div><span>Elapsed time</span><strong id="elapsed">—</strong></div>
+              <div><span>Heartbeat</span><strong id="heartbeat">—</strong></div>
+              <div><span>Run ID</span><strong id="run-id">—</strong></div>
+            </div>
+            <div class="activity">
+              <div class="activity-title"><span>Activity</span><span id="activity-summary">Waiting for a run</span></div>
+              <div class="activity-track"><i id="activity-fill"></i><b id="activity-pulse"></b></div>
+            </div>
+          </div>
+          <div class="operator-visual" aria-hidden="true">
+            <img src="/assets/hiveforge-pursuit-operations.jpeg" alt="">
+          </div>
+        </section>
+
+        <div class="workspace-grid">
+          <section id="runs" class="runs-panel" aria-labelledby="runs-heading">
+            <div class="panel-heading"><h2 id="runs-heading">Recent runs</h2><span id="run-count">0 recorded</span></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Status</th><th>Task</th><th>Started</th><th>Duration</th></tr></thead>
+                <tbody id="runs-body"></tbody>
+              </table>
+              <div id="runs-empty" class="empty-state">Run a command through HiveForge to begin recording activity.</div>
+            </div>
+          </section>
+
+          <div class="side-stack">
+            <section id="approvals" class="compact-panel" aria-labelledby="approvals-heading">
+              <div class="panel-heading"><h2 id="approvals-heading">Pending approval</h2><span id="approval-count">0 pending</span></div>
+              <div id="approvals-list" class="list"></div>
+              <div id="approvals-empty" class="empty-state small">No decisions are waiting.</div>
+            </section>
+            <section id="connectors" class="compact-panel" aria-labelledby="connectors-heading">
+              <div class="panel-heading"><h2 id="connectors-heading">Connector health</h2><span>Reported by runtime</span></div>
+              <div id="connectors-list" class="list"></div>
+            </section>
+          </div>
+        </div>
+        <footer><span>UNPS HiveForge v0.4.0</span><span id="last-refresh">Waiting for state…</span></footer>
+      </main>
+    </div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

@@ -32,3 +32,10 @@ Do not open a public issue containing a vulnerability, credential, private confi
 
 HiveForge is currently Candidate software. Security-sensitive deployment decisions require environment-specific review and least-privilege configuration.
 
+## Command Center telemetry
+
+The built-in dashboard binds to `127.0.0.1` and does not expose a public network
+listener. Approval mutations require an in-memory session token and the dashboard
+does not enable cross-origin access. Telemetry must contain short, sanitized
+summaries only. Never record prompt bodies, command output, environment variables,
+credentials, client evidence, regulated data, or private file contents.

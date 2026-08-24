@@ -135,6 +135,7 @@ for item in \
   schemas \
   examples \
   docs \
+  dashboard \
   bin \
   README.md \
   SECURITY.md \

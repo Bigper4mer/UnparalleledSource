@@ -1,6 +1,6 @@
 # Install UNPS HiveForge
 
-Version: 0.3.1  
+Version: 0.4.0  
 Status: Candidate
 
 ## One-command installation
@@ -19,6 +19,16 @@ After installation:
 hiveforge doctor
 hiveforge bootstrap
 ```
+
+Launch the local Agent Command Center:
+
+```bash
+hiveforge dashboard
+```
+
+Python 3 is optional for the core package and required for dashboard and runtime
+telemetry commands. The dashboard binds to localhost and does not send run state
+to a cloud service.
 
 Custom target:
 
