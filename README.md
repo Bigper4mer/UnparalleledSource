@@ -131,14 +131,32 @@ A production-oriented HiveForge agent should contain or reference:
 
 ## Quick start
 
-This repository is the public framework. The live UNPS library remains private and source-controlled through the approved UNPS workspace.
+This repository now includes the complete public-safe HiveForge agent package and the shared files required to deploy it. The live UNPS Drive library remains canonical for internal operations and future synchronization.
 
-1. Copy [examples/agent-manifest.example.yaml](examples/agent-manifest.example.yaml).
-2. Define the agent's identity, required capabilities, and shared references.
-3. Load only the four-file startup set.
+1. Open the [complete HiveForge package](10_CUSTOM_AGENTS/UNPS_HiveForge/README.md).
+2. Follow [INSTALL.md](10_CUSTOM_AGENTS/UNPS_HiveForge/INSTALL.md).
+3. Load the four-file startup set.
 4. Connect approved tools using least privilege.
 5. Validate the build against [schemas/agent-package.schema.json](schemas/agent-package.schema.json).
-6. Run representative acceptance scenarios before Production promotion.
+6. Run the [acceptance evaluation](09_TESTS_EVALS/Prompt_Tests/PROMPT_DATABASE_AGENT_ACCEPTANCE_EVAL.md) before Production promotion.
+
+## Repository layout
+
+```text
+00_README/                          Governance, index, and bootstrap
+03_SKILLS/                          Required reusable capabilities
+04_MCP_CONNECTORS/                  Connector and model/harness routing
+05_WORKFLOWS/                       Control-plane and workspace workflows
+06_DEPENDENCIES/                    Optional repository-intelligence capability
+09_TESTS_EVALS/                     Acceptance and regression gates
+10_CUSTOM_AGENTS/UNPS_HiveForge/    Complete 13-file agent package
+assets/                             Branded README imagery
+docs/                               Public architecture and roadmap
+examples/                           Portable manifest example
+schemas/                            Machine-readable package contract
+```
+
+See [DRIVE_SYNC_MANIFEST.md](DRIVE_SYNC_MANIFEST.md) for the published scope and source-of-truth policy.
 
 ## Operating principles
 
