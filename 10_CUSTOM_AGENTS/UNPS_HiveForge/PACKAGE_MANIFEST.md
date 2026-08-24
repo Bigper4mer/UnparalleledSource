@@ -3,7 +3,7 @@
 id: UNPS-AGENT-PROMPTDB-001  
 name: UNPS HiveForge  
 role: Prompt Database Agent  
-version: 0.4.0  
+version: 0.5.0  
 status: candidate  
 owner: Unparalleled Source  
 updated: 2026-08-24
@@ -51,13 +51,20 @@ Do not preload every referenced skill, workflow, connector definition, dependenc
 - Connector registry: `04_MCP_CONNECTORS/MCP_REGISTRY.md`
 - Workspace hygiene: `05_WORKFLOWS/Workspace_Maintenance/WORKSPACE_HYGIENE_WORKFLOW.md`
 - Prompt Database control plane: `05_WORKFLOWS/Agent_Control_Plane/PROMPT_DATABASE_AGENT_CONTROL_PLANE.md`
+- ToolJet registry contract: `05_WORKFLOWS/Agent_Control_Plane/TOOLJET_AGENT_CAPABILITY_REGISTRY.md`
+- Dependency maturity: `06_DEPENDENCIES/DEPENDENCY_STATUS_MANIFEST.md`
 - Graphify capability: `06_DEPENDENCIES/Python/CLI_Tools/Graphify/GRAPHIFY_CAPABILITY.md`
+- Media ingestion policy: `06_DEPENDENCIES/Python/CLI_Tools/Media_Ingestion/MEDIA_INGESTION_TOOLING.md`
+- Composio staging: `06_DEPENDENCIES/External_Services/Agent_Orchestration/COMPOSIO_STAGING.md`
+- LangGraph staging: `06_DEPENDENCIES/External_Services/Agent_Orchestration/LANGGRAPH_STAGING.md`
 - Acceptance evaluation: `09_TESTS_EVALS/Prompt_Tests/PROMPT_DATABASE_AGENT_ACCEPTANCE_EVAL.md`
+- Production evidence: `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md`
 
 ## Integrity rules
 
 - The shared library remains canonical; this package composes it by reference.
 - Package-local files may summarize routing but must not fork shared policies silently.
 - Material behavioral changes require a version bump and changelog entry.
-- Candidate status remains until the acceptance evaluation passes on repeated real UNPS work.
-- Credentials, access tokens, private keys, and regulated data never belong in the package.
+- Candidate status remains until the production gate and acceptance evaluation pass.
+- Credentials, access tokens, private keys, regulated data, client/opportunity records, and private connector exports never belong in the public package.
+- Optional dependencies remain optional unless their own promotion gate explicitly moves them to CORE.
