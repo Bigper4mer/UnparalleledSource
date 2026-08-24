@@ -147,6 +147,9 @@ jobs:
           $distros = @(wsl --list --quiet | ForEach-Object { ($_ -replace "`0", "").Trim() } | Where-Object { $_ })
           $distro = $distros[0]
           wsl -d $distro --user root -- bash -lc "true"
-          $workspace = (wsl -d $distro --user root -- wslpath -a "$env:GITHUB_WORKSPACE").Trim()
-          if (-not $workspace) { throw "Unable to resolve WSL workspace path" }
+          $drive = $env:GITHUB_WORKSPACE.Substring(0,1).ToLowerInvariant()
+          $rest = $env:GITHUB_WORKSPACE.Substring(2).Replace('\','/')
+          $workspace = "/mnt/$drive$rest"
+          Write-Host "Resolved WSL workspace: $workspace"
+          wsl -d $distro --user root -- bash -lc "test -d '$workspace'"
           wsl -d $distro --user root -- bash -lc "cd '$workspace' && HIVEFORGE_SOURCE_DIR='$workspace' sh install.sh --target /tmp/hiveforge --bin-dir /tmp/hiveforge-bin && /tmp/hiveforge-bin/hiveforge doctor && /tmp/hiveforge-bin/hiveforge version | grep -qx 0.5.0"
