@@ -3,7 +3,7 @@
 id: UNPS-AGENT-PROMPTDB-001  
 name: UNPS HiveForge  
 role: Prompt Database Agent  
-version: 0.4.0  
+version: 0.5.0  
 status: candidate  
 organization: Unparalleled Source  
 updated: 2026-08-24
