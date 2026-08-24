@@ -1,6 +1,6 @@
 # HiveForge Documentation
 
-Use this page as the documentation router.
+Use this page as the documentation router for HiveForge v0.6.0.
 
 ## I am new to HiveForge
 
@@ -9,6 +9,13 @@ Use this page as the documentation router.
 3. [Workflow Guide](WORKFLOW_GUIDE.md)
 4. [Command Reference](COMMAND_REFERENCE.md)
 5. [Troubleshooting](TROUBLESHOOTING.md)
+
+Fast start:
+
+```bash
+hiveforge doctor
+hiveforge onboard
+```
 
 ## I want exact commands
 
@@ -28,9 +35,9 @@ Use this page as the documentation router.
 - [Architecture](ARCHITECTURE.md)
 - [Tools & capability maturity](TOOLING_GUIDE.md)
 - [Security](../SECURITY.md)
-- [Production evidence](../09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md)
+- [v0.6.0 production evidence](../09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md)
 
-## I want the dashboards
+## I want dashboards
 
 ### Local / solo
 
@@ -40,6 +47,8 @@ Use this page as the documentation router.
 ### Shared / team
 
 - [ToolJet Setup](TOOLJET_SETUP.md)
+- Validate: `hiveforge tooljet config`
+- Start evaluation: `hiveforge tooljet up`
 - [ToolJet registry implementation contract](../05_WORKFLOWS/Agent_Control_Plane/TOOLJET_AGENT_CAPABILITY_REGISTRY.md)
 
 ## I am extending HiveForge
@@ -52,6 +61,7 @@ Use this page as the documentation router.
 
 ## Release information
 
+- [v0.6.0 release notes](RELEASE_NOTES_v0.6.0.md)
 - [v0.5.0 release notes](RELEASE_NOTES_v0.5.0.md)
 - [Drive/GitHub sync manifest](../DRIVE_SYNC_MANIFEST.md)
 
