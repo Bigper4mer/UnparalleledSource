@@ -90,6 +90,26 @@ def check_versions() -> None:
     print(f"PASS: release metadata synchronized at {VERSION}")
 
 
+def check_production_status() -> None:
+    checks = {
+        PACKAGE / "AGENT.md": "status: production",
+        PACKAGE / "PACKAGE_MANIFEST.md": "status: production",
+        PACKAGE / "BRAIN.md": "Status: Production",
+        PACKAGE / "README.md": "**Status:** Production",
+        PACKAGE / "DEPENDENCIES.md": "Status: Production",
+        PACKAGE / "INSTALL.md": "Status: Production",
+        PACKAGE / "CHANGELOG.md": "### Status\n\nProduction.",
+        ROOT / "README.md": "status-production",
+    }
+    for path, needle in checks.items():
+        if needle not in read(path):
+            fail(f"production status mismatch: {path.relative_to(ROOT)} missing {needle!r}")
+    root_readme = read(ROOT / "README.md")
+    if "**Current maturity:** Production" not in root_readme:
+        fail("root README is not marked Production")
+    print("PASS: production status synchronized")
+
+
 def iter_text_files():
     excluded_parts = {".git", "dist", "graphify-out", "__pycache__"}
     for path in ROOT.rglob("*"):
@@ -173,6 +193,7 @@ def check_optional_fallback_contract() -> None:
 def main() -> int:
     check_package_files()
     check_versions()
+    check_production_status()
     check_temp_artifacts()
     check_secrets()
     check_public_boundary()
