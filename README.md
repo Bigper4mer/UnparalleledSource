@@ -39,6 +39,29 @@ HiveForge is not a giant system prompt. It is a context-efficient control plane 
 | Agent builds are difficult to reproduce | Portable package manifests and install paths |
 | Confidence substitutes for verification | Evidence, review, and acceptance gates |
 
+## HiveForge in action
+
+<div align="center">
+  <img src="assets/hiveforge-pursuit-operations.jpeg" alt="UNPS HiveForge bee agent examining solicitation documents, risk registers, cost realism, and pursuit deadlines" width="100%" />
+  <br>
+  <sub><strong>Pursuit intelligence:</strong> source review, risk control, cost realism, and deadline awareness operating as one coordinated system.</sub>
+</div>
+
+<br>
+
+<table>
+  <tr>
+    <td width="42%" valign="top">
+      <img src="assets/hiveforge-source-inspection.jpeg" alt="UNPS HiveForge bee agent using a magnifying glass to inspect source materials" width="100%" />
+    </td>
+    <td width="58%" valign="middle">
+      <h3>Source-grounded by design</h3>
+      <p>HiveForge inspects evidence before it acts. It preserves authoritative originals, retrieves only the relevant source set, separates fact from inference, and verifies consequential outputs before promotion.</p>
+      <p><strong>Inspect → route → execute → verify → learn.</strong></p>
+    </td>
+  </tr>
+</table>
+
 ## Architecture
 
 ```mermaid
