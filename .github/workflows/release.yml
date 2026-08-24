@@ -1,48 +1,81 @@
 name: Publish Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_run:
+    workflows:
+      - Production Gate
+    types:
+      - completed
 
 permissions:
   contents: write
 
 jobs:
   publish:
-    name: Build checksum release artifact
+    name: Tag and publish checksum release artifact
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify tag matches package version
+      - name: Resolve release version and verify production metadata
         shell: bash
         run: |
           set -euo pipefail
           version=$(awk '/^version:/ { print $2; exit }' 10_CUSTOM_AGENTS/UNPS_HiveForge/AGENT.md)
-          test "$GITHUB_REF_NAME" = "v$version"
-      - name: Run deterministic gate
-        run: python scripts/production_gate.py
-      - name: Run package round-trip
-        run: sh tests/package_export_import.sh
-      - name: Run dashboard smoke
-        run: python tests/dashboard_smoke.py
-      - name: Run fallback test
-        run: sh tests/fallback_without_graphify.sh
+          test -n "$version"
+          grep -qx 'status: production' <(grep '^status:' 10_CUSTOM_AGENTS/UNPS_HiveForge/AGENT.md)
+          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
+          echo "RELEASE_TAG=v$version" >> "$GITHUB_ENV"
+          echo "RELEASE_SHA=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_ENV"
+      - name: Re-run deterministic release checks
+        run: |
+          python scripts/production_gate.py
+          sh tests/package_export_import.sh
+          python tests/dashboard_smoke.py
+          sh tests/fallback_without_graphify.sh
+      - name: Create immutable tag at tested main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'UNPS HiveForge Release Bot'
+          git config user.email 'release-bot@users.noreply.github.com'
+          existing=$(git ls-remote --tags origin "refs/tags/$RELEASE_TAG" | awk '{print $1}')
+          if [ -n "$existing" ]; then
+            test "$existing" = "$RELEASE_SHA"
+            echo "$RELEASE_TAG already points at tested commit $RELEASE_SHA"
+          else
+            git tag -a "$RELEASE_TAG" "$RELEASE_SHA" -m "UNPS HiveForge $RELEASE_TAG"
+            git push origin "$RELEASE_TAG"
+          fi
       - name: Build release archive and SHA256SUMS
         run: sh scripts/build_release.sh
       - name: Verify SHA256SUMS
         run: |
           cd dist
           sha256sum -c SHA256SUMS
-      - name: Publish GitHub release
+      - name: Publish or verify GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            dist/unps-hiveforge-${GITHUB_REF_NAME}.tar.gz \
-            dist/SHA256SUMS \
-            --title "UNPS HiveForge $GITHUB_REF_NAME" \
-            --notes-file docs/RELEASE_NOTES_v0.5.0.md
+          set -euo pipefail
+          archive="dist/unps-hiveforge-${RELEASE_TAG}.tar.gz"
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists; verifying assets."
+            gh release view "$RELEASE_TAG"
+          else
+            gh release create "$RELEASE_TAG" \
+              "$archive" \
+              dist/SHA256SUMS \
+              --target "$RELEASE_SHA" \
+              --title "UNPS HiveForge $RELEASE_TAG" \
+              --notes-file docs/RELEASE_NOTES_v0.5.0.md
+          fi
