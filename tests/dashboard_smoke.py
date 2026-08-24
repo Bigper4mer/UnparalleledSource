@@ -40,7 +40,7 @@ def main() -> int:
             try:
                 with urllib.request.urlopen(url, timeout=1) as response:
                     payload = json.loads(response.read().decode("utf-8"))
-                if payload.get("status") != "ok" or payload.get("version") != "0.5.0":
+                if payload.get("status") != "ok" or payload.get("version") != "0.6.0":
                     raise RuntimeError(f"unexpected health payload: {payload}")
                 print("HiveForge dashboard smoke test: PASS")
                 return 0
