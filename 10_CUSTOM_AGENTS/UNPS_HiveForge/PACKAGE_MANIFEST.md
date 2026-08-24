@@ -4,7 +4,7 @@ id: UNPS-AGENT-PROMPTDB-001
 name: UNPS HiveForge  
 role: Prompt Database Agent  
 version: 0.5.0  
-status: candidate  
+status: production  
 owner: Unparalleled Source  
 updated: 2026-08-24
 
@@ -65,6 +65,6 @@ Do not preload every referenced skill, workflow, connector definition, dependenc
 - The shared library remains canonical; this package composes it by reference.
 - Package-local files may summarize routing but must not fork shared policies silently.
 - Material behavioral changes require a version bump and changelog entry.
-- Candidate status remains until the production gate and acceptance evaluation pass.
+- HiveForge v0.5.0 Production status is tied to its recorded release evidence and green Production Gate; material behavioral changes require a new candidate/release-validation cycle before the changed version is promoted.
 - Credentials, access tokens, private keys, regulated data, client/opportunity records, and private connector exports never belong in the public package.
 - Optional dependencies remain optional unless their own promotion gate explicitly moves them to CORE.
