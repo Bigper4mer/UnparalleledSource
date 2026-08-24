@@ -9,9 +9,10 @@ install_one="$TMP/install-one"
 bin_one="$TMP/bin-one"
 HIVEFORGE_SOURCE_DIR="$ROOT" sh "$ROOT/install.sh" --target "$install_one" --bin-dir "$bin_one"
 "$bin_one/hiveforge" doctor
-[ "$("$bin_one/hiveforge" version)" = "0.5.0" ]
+[ "$("$bin_one/hiveforge" version)" = "0.6.0" ]
+"$bin_one/hiveforge" onboard >/dev/null
 
-export_root="$TMP/export/unps-hiveforge-v0.5.0"
+export_root="$TMP/export/unps-hiveforge-v0.6.0"
 mkdir -p "$export_root"
 for item in \
   00_README \
@@ -25,6 +26,7 @@ for item in \
   examples \
   docs \
   dashboard \
+  tooljet \
   bin \
   README.md \
   LICENSE \
@@ -34,16 +36,19 @@ for item in \
   [ ! -e "$ROOT/$item" ] || cp -R "$ROOT/$item" "$export_root/"
 done
 
-archive="$TMP/unps-hiveforge-v0.5.0.tar.gz"
-tar -czf "$archive" -C "$TMP/export" unps-hiveforge-v0.5.0
+archive="$TMP/unps-hiveforge-v0.6.0.tar.gz"
+tar -czf "$archive" -C "$TMP/export" unps-hiveforge-v0.6.0
 mkdir -p "$TMP/imported"
 tar -xzf "$archive" -C "$TMP/imported"
 
-import_root="$TMP/imported/unps-hiveforge-v0.5.0"
+import_root="$TMP/imported/unps-hiveforge-v0.6.0"
 install_two="$TMP/install-two"
 bin_two="$TMP/bin-two"
 HIVEFORGE_SOURCE_DIR="$import_root" sh "$import_root/install.sh" --target "$install_two" --bin-dir "$bin_two"
 "$bin_two/hiveforge" doctor
-[ "$("$bin_two/hiveforge" version)" = "0.5.0" ]
+[ "$("$bin_two/hiveforge" version)" = "0.6.0" ]
+"$bin_two/hiveforge" docs >/dev/null
+
+test -s "$install_two/tooljet/docker-compose.yml"
 
 printf '%s\n' "HiveForge package export/import: PASS"
