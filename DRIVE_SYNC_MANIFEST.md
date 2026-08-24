@@ -4,7 +4,7 @@ Version: 1.1.0
 Updated: 2026-08-24  
 GitHub repository: `Bigper4mer/UnparalleledSource`  
 Canonical internal source: `PROMPTS.UNPS`  
-Target public release: `v0.5.0`
+Published public release: `v0.5.0`
 
 ## Purpose
 
@@ -59,34 +59,36 @@ The mirror also includes public-safe files referenced by the package:
 - `install.sh` — non-root installer supporting immutable refs and optional archive SHA-256 verification
 - `bin/hiveforge` — launcher for validation, bootstrap, dashboard, telemetry, and runtime state
 - `dashboard/` — local Agent Command Center, runtime telemetry, approvals, and connector health
-- `.github/workflows/production-gate.yml` — release-candidate CI gate
-- `.github/workflows/release.yml` — versioned archive/checksum/release automation
-- `scripts/production_gate.py` — package/version/privacy/secret regression guard
-- `scripts/build_release.sh` — deterministic public release archive + SHA256SUMS
+- `.github/workflows/production-gate.yml` — cross-platform Production CI gate
+- `.github/workflows/release.yml` — automatic immutable tag/archive/checksum/release publication after a green `main` gate
+- `scripts/production_gate.py` — package/version/status/privacy/secret regression guard
+- `scripts/build_release.sh` — deterministic public release archive + `SHA256SUMS`
 - `tests/` — install, dashboard, fallback, Graphify, and package round-trip smoke tests
+- `.gitattributes` — deterministic LF line endings for Windows/WSL-sensitive files
 
 ## Public/private audit
 
-The v0.5.0 release branch was reviewed for known client/opportunity identifiers and common credential/private-key patterns before release preparation. CI repeats these scans on every candidate commit.
+The v0.5.0 public distribution was reviewed for known client/opportunity identifiers and common credential/private-key patterns. CI repeats these scans on every release commit.
 
 ## Validation
 
-| Check | Release-gate expectation |
+| Check | v0.5.0 result |
 |---|---|
-| HiveForge package files | 13/13 |
-| Empty package files | 0 |
-| Version consistency | 0.5.0 across package release metadata |
-| Credential/token scan | Clear |
-| Private-key scan | Clear |
-| Known client/opportunity identifiers | Excluded |
-| Linux fresh install | Required pass |
-| macOS fresh install | Required pass |
-| WSL install | Required when WSL runner is available; otherwise explicit external gate |
-| Dashboard smoke test | Required pass |
-| Graphify live fixture | Required pass for Graphify integration evidence |
-| Fallback without Graphify | Required pass |
-| Export/import round trip | Required pass |
-| Three-workflow acceptance matrix | Required pass/evidence |
+| HiveForge package files | PASS — 13/13 |
+| Empty package files | PASS — 0 |
+| Version consistency | PASS — 0.5.0 |
+| Production status consistency | PASS |
+| Credential/token scan | PASS — clear |
+| Private-key scan | PASS — clear |
+| Known client/opportunity identifiers | PASS — excluded |
+| Linux fresh install | PASS |
+| macOS fresh install | PASS |
+| WSL/Ubuntu fresh install | PASS |
+| Dashboard smoke test | PASS |
+| Graphify live fixture | PASS — extraction + clustering |
+| Fallback without Graphify | PASS |
+| Export/import round trip | PASS — Linux + macOS |
+| Three-workflow acceptance matrix | PASS — critical scenarios 11/11 |
 
 ## Excluded by design
 
