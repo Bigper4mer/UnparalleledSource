@@ -1,37 +1,45 @@
 # Install UNPS HiveForge
 
-Version: 0.5.0  
+Version: 0.6.0  
 Status: Production
 
 ## Production install
 
-For the immutable v0.5.0 release tag:
+For the immutable v0.6.0 release tag:
 
 ```bash
-HIVEFORGE_REF=v0.5.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.5.0/install.sh | sh
+HIVEFORGE_REF=v0.6.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh | sh
 ```
 
-The installer places the package under the user's local data directory, creates a `hiveforge` launcher under `~/.local/bin`, validates all 13 required agent files, and refuses to silently overwrite an existing installation.
+The installer places the package under the user's local data directory, creates a `hiveforge` launcher under `~/.local/bin`, validates the required agent and onboarding files, and refuses to silently overwrite an existing installation.
 
-After installation:
+## First run
 
 ```bash
 hiveforge doctor
-hiveforge bootstrap
+hiveforge version
+hiveforge onboard
 ```
 
-Launch the local Agent Command Center:
+`hiveforge onboard` prints a copy/paste startup prompt that guides the agent through minimum useful intake, current-project inspection, workflow recommendation, first-task execution, verification, and scoped learning.
+
+Useful optional setup:
 
 ```bash
+hiveforge profile-init
+hiveforge project-init
+hiveforge docs
 hiveforge dashboard
 ```
 
-Python 3 is optional for the core package and required for dashboard and runtime telemetry commands. The dashboard binds to localhost and does not send run state to a cloud service.
+- `profile-init` creates a human-readable working-preference template and refuses to overwrite an existing profile.
+- `project-init` creates an optional project-intake file only when the user explicitly requests it; reuse an established README/status/ADR system when one already exists.
+- `dashboard` launches the localhost Command Center.
 
 ## Release verification
 
-Download the release archive and `SHA256SUMS`, then verify the checksum before installation when using a packaged release artifact.
+Download the release archive and `SHA256SUMS`, then verify before installation when using a packaged release artifact.
 
 Linux:
 
@@ -48,21 +56,22 @@ shasum -a 256 -c SHA256SUMS
 ## Custom target
 
 ```bash
-HIVEFORGE_REF=v0.5.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.5.0/install.sh \
+HIVEFORGE_REF=v0.6.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh \
   | sh -s -- --target /absolute/path/to/hiveforge
 ```
 
 Existing installations are never silently overwritten. Use `--force` to preserve the existing installation as a timestamped backup before installing.
 
-## Option A — Connected Drive deployment
+## Option A — Connected workspace deployment
 
-1. Create or open a compatible Custom Agent environment.
-2. Provide read access to the `PROMPTS.UNPS` Drive folder.
+1. Create or open a compatible agent environment.
+2. Provide only authorized access to the relevant project/library sources.
 3. Load `BRAIN.md`, `AGENT.md`, `SYSTEM_INSTRUCTIONS.md`, and `PACKAGE_MANIFEST.md`.
-4. Configure the Google Drive/Workspace connector with minimum required permissions.
-5. Keep all other skills, workflows, connectors, and dependencies reference-only until a task triggers them.
-6. Run validation.
+4. Run the first-use intake or load an already validated user working profile.
+5. Resolve current client/project/internal scope and source of truth.
+6. Keep all other skills, workflows, connectors, and dependencies reference-only until a task triggers them.
+7. Run validation before consequential changes.
 
 ## Option B — Portable offline subset
 
@@ -71,33 +80,48 @@ Existing installations are never silently overwritten. Use `--force` to preserve
 3. Preserve canonical folder names or deliberately update manifest references.
 4. Configure model/harness mappings for the destination environment.
 5. Do not bundle credentials or client data.
-6. Run validation.
+6. Run `hiveforge doctor` and the applicable acceptance tests.
+
+## Optional ToolJet cockpit
+
+ToolJet is STAGED and not required for core HiveForge.
+
+```bash
+hiveforge tooljet status
+hiveforge tooljet config
+hiveforge tooljet up
+hiveforge tooljet url
+```
+
+The evaluation stack requires Docker + Docker Compose v2 and defaults to `http://localhost:8080`. Keep canonical policy, authorization, and source-of-truth state outside ToolJet UI logic.
 
 ## Validation
 
-Confirm that the agent can:
+Confirm that HiveForge can:
 
-- identify `PROMPTS.UNPS` as the canonical internal library;
-- distinguish prompts, skills, workflows, connectors, dependencies, schemas, evaluations, and Custom Agent builds;
-- search before creating duplicate assets;
+- identify the canonical source of truth;
+- distinguish user preferences from project/client facts;
+- search before creating duplicate assets or project roots;
 - resolve project/client scope before persistent writes;
+- recommend the smallest appropriate workflow;
 - load only task-relevant assets;
 - preserve authoritative originals and version history;
 - apply tool authorization boundaries;
-- produce a concise change report;
+- produce a concise verification/change report;
 - route a reusable correction through the learning loop;
 - fail safely when a connector, dependency, or destination is unavailable.
 
-Use `09_TESTS_EVALS/Prompt_Tests/PROMPT_DATABASE_AGENT_ACCEPTANCE_EVAL.md` and `PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md` for production evidence.
+Use `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md` for the guided-onboarding production evidence.
 
 ## Optional Graphify setup
 
-Graphify is not required for core HiveForge operation. For a sufficiently complex code repository only:
+Graphify is not required for core HiveForge operation. For sufficiently complex repositories only:
 
 ```bash
 python3 -m pip install graphifyy==0.9.48
 graphify install --project --platform codex
 graphify .
+graphify cluster-only .
 ```
 
-Graphify remains a Candidate capability even when the core HiveForge v0.5.0 package is Production. Its own promotion gate is independent.
+Graphify remains a Candidate capability even when HiveForge v0.6.0 is Production. Its promotion gate is independent.
