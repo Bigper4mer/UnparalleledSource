@@ -25,6 +25,20 @@ BRAIN.md
 
 Only the first four files belong in the normal startup context. Everything else loads through progressive disclosure.
 
+## Agent Command Center
+
+The public distribution includes a localhost-only operational dashboard for
+instrumented HiveForge runs:
+
+```bash
+hiveforge dashboard
+hiveforge run --task "Prompt library health check" -- your-command
+```
+
+It reports run status, elapsed time, heartbeat, pending approvals, recent runs,
+and connector health without storing command output, prompt bodies, or secrets.
+See the public [Command Center guide](https://github.com/Bigper4mer/UnparalleledSource/blob/main/docs/COMMAND_CENTER.md).
+
 ## Package contents
 
 | File | Purpose |
