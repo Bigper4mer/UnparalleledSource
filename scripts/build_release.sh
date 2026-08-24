@@ -24,6 +24,7 @@ for item in \
   examples \
   docs \
   dashboard \
+  tooljet \
   bin \
   README.md \
   LICENSE \
