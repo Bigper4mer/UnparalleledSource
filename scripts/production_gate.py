@@ -158,8 +158,16 @@ def check_temp_artifacts() -> None:
     for path in ROOT.rglob("*"):
         if not path.is_file():
             continue
-        upper = path.name.upper()
-        if "_TEMP" in upper or upper.startswith("TEMP_") or upper.endswith(".TEMP"):
+        upper_name = path.name.upper()
+        upper_stem = path.stem.upper()
+        is_temp = (
+            upper_stem == "TEMP"
+            or upper_stem.startswith("TEMP_")
+            or upper_stem.endswith("_TEMP")
+            or ".TEMP." in upper_name
+            or upper_name.endswith(".TEMP")
+        )
+        if is_temp:
             offenders.append(str(path.relative_to(ROOT)))
     if offenders:
         fail("temporary artifacts present: " + ", ".join(offenders))
