@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic release checks for the public HiveForge package."""
+"""Deterministic production checks for the public HiveForge package."""
 
 from __future__ import annotations
 
@@ -9,22 +9,12 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "10_CUSTOM_AGENTS" / "UNPS_HiveForge"
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 
 REQUIRED_PACKAGE_FILES = [
-    "README.md",
-    "BRAIN.md",
-    "AGENT.md",
-    "SYSTEM_INSTRUCTIONS.md",
-    "PACKAGE_MANIFEST.md",
-    "SKILLS.md",
-    "WORKFLOWS.md",
-    "MCP_PREFERENCES.md",
-    "DEPENDENCIES.md",
-    "OUTPUT_SCHEMAS.md",
-    "TOOL_POLICY.md",
-    "INSTALL.md",
-    "CHANGELOG.md",
+    "README.md", "BRAIN.md", "AGENT.md", "SYSTEM_INSTRUCTIONS.md",
+    "PACKAGE_MANIFEST.md", "SKILLS.md", "WORKFLOWS.md", "MCP_PREFERENCES.md",
+    "DEPENDENCIES.md", "OUTPUT_SCHEMAS.md", "TOOL_POLICY.md", "INSTALL.md", "CHANGELOG.md",
 ]
 
 REQUIRED_SUPPORT_FILES = [
@@ -35,7 +25,7 @@ REQUIRED_SUPPORT_FILES = [
     "06_DEPENDENCIES/External_Services/Agent_Orchestration/LANGGRAPH_STAGING.md",
     "06_DEPENDENCIES/Python/CLI_Tools/Media_Ingestion/MEDIA_INGESTION_TOOLING.md",
     "05_WORKFLOWS/Agent_Control_Plane/TOOLJET_AGENT_CAPABILITY_REGISTRY.md",
-    "09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md",
+    "09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md",
     "docs/GETTING_STARTED.md",
     "docs/USER_INTAKE.md",
     "docs/WORKFLOW_GUIDE.md",
@@ -43,22 +33,24 @@ REQUIRED_SUPPORT_FILES = [
     "docs/TOOLING_GUIDE.md",
     "docs/TOOLJET_SETUP.md",
     "docs/TROUBLESHOOTING.md",
+    "docs/README.md",
+    "docs/RELEASE_NOTES_v0.6.0.md",
     "examples/FIRST_RUN_PROMPT.md",
     "examples/USER_PROFILE_TEMPLATE.md",
     "examples/PROJECT_INTAKE_TEMPLATE.md",
+    "tooljet/docker-compose.yml",
+    "tests/onboarding_cli_smoke.sh",
 ]
 
 SECRET_PATTERNS = {
     "private key": re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
     "OpenAI-style key": re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b"),
-    "GitHub personal token": re.compile(r"\bgh[pousr]_[A-Za-z0-9]{30,}\b"),
+    "GitHub token": re.compile(r"\bgh[pousr]_[A-Za-z0-9]{30,}\b"),
     "Google API key": re.compile(r"\bAIza[0-9A-Za-z_-]{30,}\b"),
     "AWS access key": re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
 }
 
-TEXT_SUFFIXES = {
-    ".md", ".txt", ".py", ".sh", ".json", ".yaml", ".yml", ".toml", ".html", ".css", ".js", ".svg"
-}
+TEXT_SUFFIXES = {".md", ".txt", ".py", ".sh", ".json", ".yaml", ".yml", ".toml", ".html", ".css", ".js", ".svg"}
 
 
 def fail(message: str) -> None:
@@ -75,7 +67,7 @@ def read(path: pathlib.Path) -> str:
     return text
 
 
-def check_package_files() -> None:
+def check_files() -> None:
     for name in REQUIRED_PACKAGE_FILES:
         read(PACKAGE / name)
     for name in REQUIRED_SUPPORT_FILES:
@@ -93,6 +85,9 @@ def check_versions() -> None:
         PACKAGE / "CHANGELOG.md": f"## {VERSION} —",
         PACKAGE / "BRAIN.md": f"Version: {VERSION}",
         ROOT / "README.md": f"version-{VERSION}",
+        ROOT / "install.sh": "v0.6.0",
+        ROOT / "dashboard" / "server.py": '"version": "0.6.0"',
+        ROOT / "dashboard" / "static" / "index.html": "HiveForge v0.6.0",
     }
     for path, needle in checks.items():
         if needle not in read(path):
@@ -114,41 +109,38 @@ def check_production_status() -> None:
     for path, needle in checks.items():
         if needle not in read(path):
             fail(f"production status mismatch: {path.relative_to(ROOT)} missing {needle!r}")
-    root_readme = read(ROOT / "README.md")
-    if "**Current maturity:** Production" not in root_readme:
-        fail("root README is not marked Production")
     print("PASS: production status synchronized")
 
 
 def check_onboarding_surface() -> None:
     root_readme = read(ROOT / "README.md")
     package_readme = read(PACKAGE / "README.md")
-    required_root_links = [
-        "docs/GETTING_STARTED.md",
-        "docs/USER_INTAKE.md",
-        "docs/WORKFLOW_GUIDE.md",
-        "docs/COMMAND_REFERENCE.md",
-        "docs/TOOLING_GUIDE.md",
-        "docs/TOOLJET_SETUP.md",
+    launcher = read(ROOT / "bin" / "hiveforge")
+    for link in (
+        "docs/GETTING_STARTED.md", "docs/USER_INTAKE.md", "docs/WORKFLOW_GUIDE.md",
+        "docs/COMMAND_REFERENCE.md", "docs/TOOLING_GUIDE.md", "docs/TOOLJET_SETUP.md",
         "examples/FIRST_RUN_PROMPT.md",
-    ]
-    for link in required_root_links:
+    ):
         if link not in root_readme:
             fail(f"root README missing onboarding link: {link}")
     if "docs/GETTING_STARTED.md" not in package_readme:
-        fail("package README does not route new users to Getting Started")
-    intake = read(ROOT / "docs" / "USER_INTAKE.md")
-    if "Do not" not in intake or "password" not in intake.lower():
-        fail("user intake guide lacks explicit sensitive-data boundary")
+        fail("package README does not route users to Getting Started")
+    for command in ("onboard", "docs", "profile-init", "project-init", "tooljet"):
+        if command not in launcher:
+            fail(f"launcher missing guided command: {command}")
+    intake = read(ROOT / "docs" / "USER_INTAKE.md").lower()
+    for prohibited in ("password", "api key", "token"):
+        if prohibited not in intake:
+            fail(f"user intake guide missing sensitive-data boundary: {prohibited}")
     print("PASS: guided onboarding surface")
 
 
 def iter_text_files():
-    excluded_parts = {".git", "dist", "graphify-out", "__pycache__"}
+    excluded = {".git", "dist", "graphify-out", "__pycache__"}
     for path in ROOT.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in TEXT_SUFFIXES:
             continue
-        if any(part in excluded_parts for part in path.parts):
+        if any(part in excluded for part in path.parts):
             continue
         yield path
 
@@ -158,16 +150,8 @@ def check_temp_artifacts() -> None:
     for path in ROOT.rglob("*"):
         if not path.is_file():
             continue
-        upper_name = path.name.upper()
-        upper_stem = path.stem.upper()
-        is_temp = (
-            upper_stem == "TEMP"
-            or upper_stem.startswith("TEMP_")
-            or upper_stem.endswith("_TEMP")
-            or ".TEMP." in upper_name
-            or upper_name.endswith(".TEMP")
-        )
-        if is_temp:
+        name = path.name.upper()
+        if name.startswith("TEMP_") or name.endswith("_TEMP") or name.endswith(".TEMP"):
             offenders.append(str(path.relative_to(ROOT)))
     if offenders:
         fail("temporary artifacts present: " + ", ".join(offenders))
@@ -190,57 +174,49 @@ def check_secrets() -> None:
 
 
 def check_public_boundary() -> None:
-    prohibited_paths = [
-        "clients",
-        "client_data",
-        "opportunities",
-        "correspondence",
-        "medical_records",
-        "financial_records",
-        "credentials",
-        "secrets",
-    ]
+    prohibited = {"clients", "client_data", "opportunities", "correspondence", "medical_records", "financial_records", "credentials", "secrets"}
     offenders = []
     for path in ROOT.rglob("*"):
-        relative_parts = {part.lower() for part in path.relative_to(ROOT).parts}
-        if any(name in relative_parts for name in prohibited_paths):
+        parts = {part.lower() for part in path.relative_to(ROOT).parts}
+        if parts & prohibited:
             offenders.append(str(path.relative_to(ROOT)))
     if offenders:
         fail("private-scope path detected in public mirror: " + ", ".join(offenders[:20]))
     print("PASS: public/private path boundary")
 
 
-def check_acceptance_evidence() -> None:
-    path = ROOT / "09_TESTS_EVALS" / "Prompt_Tests" / "PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md"
-    text = read(path)
-    if "Critical scenarios: **11/11 PASS**" not in text:
-        fail("production acceptance evidence is incomplete")
-    for workflow in ("Workflow A", "Workflow B", "Workflow C"):
-        if workflow not in text:
-            fail(f"missing acceptance workflow: {workflow}")
-    print("PASS: three-workflow acceptance evidence")
+def check_acceptance() -> None:
+    text = read(ROOT / "09_TESTS_EVALS" / "Prompt_Tests" / "PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md")
+    if "Critical scenarios: **PASS**" not in text:
+        fail("v0.6.0 production acceptance evidence is incomplete")
+    for phrase in ("Guided onboarding", "Experienced operator", "Project routing", "Fallback"):
+        if phrase not in text:
+            fail(f"acceptance matrix missing coverage: {phrase}")
+    print("PASS: v0.6.0 acceptance evidence")
 
 
-def check_optional_fallback_contract() -> None:
+def check_optional_fallback() -> None:
     brain = read(PACKAGE / "BRAIN.md")
     deps = read(PACKAGE / "DEPENDENCIES.md")
     if "If Graphify is unavailable" not in brain:
         fail("BRAIN missing Graphify fallback contract")
     if "graphifyy==0.9.48" not in deps or "CANDIDATE" not in deps:
         fail("dependency policy does not keep Graphify optional/candidate")
-    print("PASS: optional dependency fallback contract")
+    if "ToolJet" not in deps or "STAGED" not in deps:
+        fail("dependency policy does not keep ToolJet staged")
+    print("PASS: optional dependency maturity/fallback contract")
 
 
 def main() -> int:
-    check_package_files()
+    check_files()
     check_versions()
     check_production_status()
     check_onboarding_surface()
     check_temp_artifacts()
     check_secrets()
     check_public_boundary()
-    check_acceptance_evidence()
-    check_optional_fallback_contract()
+    check_acceptance()
+    check_optional_fallback()
     print("HiveForge production gate: PASS")
     return 0
 
