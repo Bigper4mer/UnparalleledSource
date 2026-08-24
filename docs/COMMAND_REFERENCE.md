@@ -1,26 +1,42 @@
 # HiveForge Command Reference
 
-This page documents the commands shipped with the HiveForge v0.5.0 launcher and local runtime.
+This page documents the commands shipped with the HiveForge v0.6.0 launcher and local runtime.
 
-## Discovery commands
-
-| Command | Purpose | Example |
-|---|---|---|
-| `hiveforge help` | Show command list | `hiveforge help` |
-| `hiveforge version` | Print installed HiveForge version | `hiveforge version` |
-| `hiveforge path` | Print installation directory | `hiveforge path` |
-| `hiveforge doctor` | Verify all 13 required package files are present | `hiveforge doctor` |
-| `hiveforge bootstrap` | Print the four-file startup sequence and next routing step | `hiveforge bootstrap` |
-
-Recommended first five commands:
+## Recommended first commands
 
 ```bash
 hiveforge doctor
 hiveforge version
-hiveforge path
-hiveforge bootstrap
-hiveforge help
+hiveforge onboard
+hiveforge docs
 ```
+
+## Guided onboarding commands
+
+| Command | Purpose | Example |
+|---|---|---|
+| `hiveforge onboard` | Print the copy/paste first-run intake and startup workflow | `hiveforge onboard` |
+| `hiveforge docs` | Show installed documentation paths | `hiveforge docs` |
+| `hiveforge profile-init [PATH]` | Create a human-readable user working-profile template; refuses overwrite | `hiveforge profile-init` |
+| `hiveforge project-init [PATH]` | Create an optional project-intake template; refuses overwrite | `hiveforge project-init ./HIVEFORGE_PROJECT.md` |
+
+Default user profile path:
+
+```text
+~/.config/unps-hiveforge/USER_PROFILE.md
+```
+
+`project-init` is intentionally optional. Reuse an established README/status/ADR/project-state system when one already exists.
+
+## Discovery and validation
+
+| Command | Purpose |
+|---|---|
+| `hiveforge help` | Show command list |
+| `hiveforge version` | Print installed HiveForge version |
+| `hiveforge path` | Print installation directory |
+| `hiveforge doctor` | Verify package and guided-onboarding assets |
+| `hiveforge bootstrap` | Print startup sequence and routing guidance |
 
 ## Command Center
 
@@ -30,13 +46,8 @@ Starts the localhost-only Command Center.
 
 ```bash
 hiveforge dashboard
-```
-
-Useful server options supported by the dashboard script can be passed after the command:
-
-```bash
 hiveforge dashboard --no-open
-hiveforge dashboard --port 8744 --no-open
+hiveforge dashboard --port 8844 --no-open
 hiveforge dashboard --verbose
 ```
 
@@ -52,43 +63,29 @@ Wrap an ordinary command with HiveForge run telemetry.
 hiveforge run --task "Run the test suite" -- npm test
 ```
 
-```bash
-hiveforge run --task "Generate report" -- python3 report.py
-```
-
-The wrapped command's stdout/stderr remains the command's own output. HiveForge stores sanitized run state and heartbeat metadata rather than the command body or output.
+The wrapped command owns its stdout/stderr. HiveForge stores sanitized run state and heartbeat metadata rather than command output or prompt content.
 
 ### `hiveforge status`
 
-Show current or most recent run:
-
 ```bash
 hiveforge status
-```
-
-Machine-readable state:
-
-```bash
 hiveforge status --json
 ```
 
-## External instrumentation commands
+## External instrumentation
 
-These are useful when a coding harness, workflow runner, or custom integration wants to report activity to HiveForge without using `hiveforge run`.
-
-### Start a run
+### Start
 
 ```bash
-RUN_ID=$(hiveforge start "Prepare customer proposal")
+RUN_ID=$(hiveforge start "Prepare proposal" --phase "Source review")
 ```
 
-Optional starting phase:
+### Event
 
 ```bash
-RUN_ID=$(hiveforge start "Prepare customer proposal" --phase "Source review")
+hiveforge event "$RUN_ID" "Research" "Validated primary sources"
+hiveforge event "$RUN_ID" "Executing" "Heartbeat" --type heartbeat
 ```
-
-### Record an event
 
 Syntax:
 
@@ -96,37 +93,18 @@ Syntax:
 hiveforge event RUN_ID PHASE SUMMARY [--type EVENT_TYPE]
 ```
 
-Example:
-
-```bash
-hiveforge event "$RUN_ID" "Research" "Validated primary sources"
-```
-
-Heartbeat-style event:
-
-```bash
-hiveforge event "$RUN_ID" "Executing" "Still running" --type heartbeat
-```
-
-### Finish a run
-
-Completed:
+### Finish
 
 ```bash
 hiveforge finish "$RUN_ID" completed "Deliverable verified"
+hiveforge finish "$RUN_ID" failed "Verification failed"
 ```
 
-Failed:
-
-```bash
-hiveforge finish "$RUN_ID" failed "Build failed during verification"
-```
-
-Allowed final statuses are `completed` and `failed`.
+Allowed final statuses: `completed`, `failed`.
 
 ## Approval commands
 
-### Request approval
+Request:
 
 ```bash
 APPROVAL_ID=$(hiveforge approval "$RUN_ID" \
@@ -134,31 +112,22 @@ APPROVAL_ID=$(hiveforge approval "$RUN_ID" \
   "Final document is ready for release")
 ```
 
-The run moves to `waiting_approval`.
-
-### Approve
+Decide:
 
 ```bash
 hiveforge decide "$APPROVAL_ID" approve
-```
-
-### Deny
-
-```bash
 hiveforge decide "$APPROVAL_ID" deny
 ```
 
-Consequential actions should be wired so the action occurs **after** approval, not before it.
+Consequential actions should occur **after** approval, not before it.
 
 ## Connector health
-
-Syntax:
 
 ```text
 hiveforge connector NAME STATUS
 ```
 
-Allowed statuses:
+Statuses:
 
 ```text
 connected
@@ -175,12 +144,40 @@ hiveforge connector "GitHub" connected
 hiveforge connector "ToolJet" unknown
 ```
 
-Connector status is operational telemetry; it does not establish authorization or credentials.
+Operational status does not grant authorization.
+
+## Optional ToolJet commands
+
+ToolJet is a STAGED team cockpit, not a core dependency.
+
+```bash
+hiveforge tooljet status
+hiveforge tooljet config
+hiveforge tooljet up
+hiveforge tooljet url
+hiveforge tooljet down
+```
+
+Behavior:
+
+| Command | Result |
+|---|---|
+| `status` | Explain maturity, compose path, commands and guide |
+| `config` | Validate/render Docker Compose configuration |
+| `up` | Start local evaluation stack |
+| `url` | Print `http://localhost:8080` |
+| `down` | Stop/remove local evaluation stack |
+
+`config`, `up`, and `down` require Docker + Docker Compose v2.
 
 ## Complete command map
 
 ```text
 hiveforge
+├── onboard
+├── docs
+├── profile-init [PATH]
+├── project-init [PATH]
 ├── doctor
 ├── bootstrap
 ├── dashboard
@@ -192,60 +189,108 @@ hiveforge
 ├── approval
 ├── decide
 ├── connector
+├── tooljet
+│   ├── status
+│   ├── config
+│   ├── up
+│   ├── url
+│   └── down
 ├── path
 ├── version
 └── help
 ```
 
-## Common copy/paste sequences
+## Copy/paste sequences
 
-### Confirm installation
+### First-time user
 
 ```bash
-hiveforge doctor && hiveforge version && hiveforge bootstrap
+hiveforge doctor && hiveforge version
+hiveforge onboard
 ```
 
-### Open the dashboard without launching a browser automatically
+### Create optional human-readable user context
+
+```bash
+hiveforge profile-init
+```
+
+### Start from an existing project
+
+```bash
+hiveforge bootstrap
+hiveforge docs
+```
+
+Then ask the loaded agent to inspect the existing project before creating any state file.
+
+### Project without useful intake/status state
+
+```bash
+hiveforge project-init
+```
+
+### Local dashboard
 
 ```bash
 hiveforge dashboard --no-open
 ```
 
-### Instrument a real task
+### Real command telemetry
 
 ```bash
-hiveforge run --task "Repository tests" -- sh -c 'npm test'
+hiveforge run --task "Repository tests" -- npm test
 ```
 
-### See the full runtime state
+### Full runtime state
 
 ```bash
 hiveforge status --json
 ```
 
-### Manually instrument a multi-step workflow
+### Manual multi-step run
 
 ```bash
-RUN_ID=$(hiveforge start "Example multi-step workflow" --phase "Intake")
+RUN_ID=$(hiveforge start "Example workflow" --phase "Intake")
 hiveforge event "$RUN_ID" "Research" "Relevant evidence collected"
-hiveforge event "$RUN_ID" "Verification" "Output checks passed"
+hiveforge event "$RUN_ID" "Verification" "Checks passed"
 hiveforge finish "$RUN_ID" completed "Workflow complete"
 ```
 
-## HiveForge conversation commands
+### Optional shared cockpit
 
-HiveForge also uses **workflow-language commands** such as `/brainstorm`, `/spec`, `/tickets`, `/plan`, `/implement`, `/review`, `/verify`, `/research`, `/diagram`, `/readme`, and `/retro` as routing conventions inside an agent conversation.
+```bash
+hiveforge tooljet config
+hiveforge tooljet up
+hiveforge tooljet url
+```
 
-These are not necessarily shell executables. They tell the agent which operating mode you want.
+## Conversation workflow commands
+
+HiveForge also uses workflow-language commands inside an agent conversation. These are routing conventions, not necessarily shell executables.
+
+| Conversation command | Intent |
+|---|---|
+| `/brainstorm` | Explore options without changing files |
+| `/spec` | Turn intent into a durable definition |
+| `/tickets` | Break settled work into bounded slices |
+| `/plan` | Sequence execution |
+| `/implement` | Execute approved work |
+| `/review` | Critique independently |
+| `/verify` | Prove completion |
+| `/research` | Research current/uncertain facts |
+| `/diagram` | Choose/render the right system view |
+| `/readme` | Improve repository onboarding/documentation |
+| `/retro` | Extract reusable learning |
 
 Examples:
 
 ```text
-/brainstorm Review this architecture and give me options. Do not change files.
+/brainstorm Review this architecture. Give me options and trade-offs. Do not change files.
 ```
 
 ```text
-/research Determine the current vendor landscape and cite primary sources.
+/research Determine the current vendor landscape using authoritative sources and cite the evidence.
 ```
 
 ```text
@@ -253,7 +298,7 @@ Examples:
 ```
 
 ```text
-/retro Extract only reusable lessons from what went wrong and what worked.
+/retro Extract only reusable lessons from what failed and what worked.
 ```
 
-See [`WORKFLOW_GUIDE.md`](WORKFLOW_GUIDE.md) for when to use each mode.
+See [WORKFLOW_GUIDE.md](WORKFLOW_GUIDE.md) for recommended inputs, outputs and triggers.
