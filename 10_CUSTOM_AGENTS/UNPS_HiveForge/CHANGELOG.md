@@ -12,12 +12,14 @@ All material package changes are recorded here. Dates use `YYYY-MM-DD`.
 - ToolJet Agent & Capability Registry implementation contract.
 - Media ingestion policy preferring `yt-dlp` and keeping `youtube-dl` as compatibility reference only.
 - Three-workflow production acceptance evidence.
+- Cross-platform line-ending guard for Windows/WSL compatibility.
 
 ### Changed
 
 - Synced package version to BRAIN v0.5-era behavior.
 - Installer now supports immutable release refs and release-artifact checksum verification.
 - Public package metadata distinguishes core Production readiness from independently staged/candidate optional capabilities.
+- Release automation now publishes only after the Production Gate succeeds on `main`.
 
 ### Security
 
@@ -25,9 +27,21 @@ All material package changes are recorded here. Dates use `YYYY-MM-DD`.
 - Added explicit public distribution license notice preserving Unparalleled Source rights unless a separate license is granted.
 - Release archives include SHA-256 checksums.
 
+### Validation
+
+- Static/privacy/secret gate: PASS.
+- Three-workflow acceptance evidence: PASS.
+- Fresh Linux install: PASS.
+- Fresh macOS install: PASS.
+- Fresh WSL/Ubuntu install: PASS.
+- Dashboard health smoke test: PASS.
+- Live Graphify 0.9.48 extraction + clustering fixture: PASS.
+- Fallback without Graphify: PASS.
+- Package export/import round trip on Linux and macOS: PASS.
+
 ### Status
 
-Release Candidate until mandatory CI jobs pass on the release branch and the immutable `v0.5.0` tag is created.
+Production. The immutable `v0.5.0` release is published automatically from the exact tested `main` commit after its Production Gate succeeds. Optional dependencies retain their independent maturity states.
 
 ## 0.4.0 — 2026-08-24
 
