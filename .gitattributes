@@ -1,0 +1,11 @@
+# Keep executable and configuration text deterministic across Windows, WSL, macOS, and Linux.
+*.sh text eol=lf
+bin/hiveforge text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
