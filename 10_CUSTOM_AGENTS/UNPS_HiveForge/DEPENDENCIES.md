@@ -1,7 +1,7 @@
 # UNPS HiveForge — Dependencies
 
 Version: 0.5.0  
-Status: Release Candidate
+Status: Production
 
 ## Core
 
@@ -41,3 +41,7 @@ See `06_DEPENDENCIES/DEPENDENCY_STATUS_MANIFEST.md` for maturity, promotion, fal
 - Store credential names as placeholders only; store actual secrets in approved secret management.
 - Record production dependency changes in `CHANGELOG.md` and the canonical dependency registry.
 - A missing optional dependency must trigger a capability-equivalent fallback or an explicit blocker, never invented success.
+
+## Production boundary
+
+HiveForge core Production status does not promote every optional capability. Graphify, Only-CLI, yt-dlp, Composio, LangGraph, ToolJet, and other non-CORE dependencies retain the maturity state shown above until their independent promotion gates pass.
