@@ -1,0 +1,92 @@
+#!/usr/bin/env sh
+set -eu
+
+resolved_path=$0
+while [ -L "$resolved_path" ]; do
+  resolved_dir=$(CDPATH= cd -- "$(dirname -- "$resolved_path")" && pwd)
+  link_target=$(readlink "$resolved_path")
+  case "$link_target" in
+    /*) resolved_path=$link_target ;;
+    *) resolved_path=$resolved_dir/$link_target ;;
+  esac
+done
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$resolved_path")" && pwd)
+install_root=$(CDPATH= cd -- "$script_dir/.." && pwd)
+agent_root="$install_root/10_CUSTOM_AGENTS/UNPS_HiveForge"
+
+required_files="
+README.md
+BRAIN.md
+AGENT.md
+SYSTEM_INSTRUCTIONS.md
+PACKAGE_MANIFEST.md
+SKILLS.md
+WORKFLOWS.md
+MCP_PREFERENCES.md
+DEPENDENCIES.md
+OUTPUT_SCHEMAS.md
+TOOL_POLICY.md
+INSTALL.md
+CHANGELOG.md
+"
+
+doctor() {
+  missing=0
+  for required_file in $required_files; do
+    if [ ! -s "$agent_root/$required_file" ]; then
+      echo "Missing: $agent_root/$required_file" >&2
+      missing=1
+    fi
+  done
+  [ "$missing" -eq 0 ] || exit 1
+  echo "HiveForge doctor: PASS — 13/13 agent files present."
+}
+
+bootstrap() {
+  cat <<EOF
+Load UNPS HiveForge from:
+$agent_root
+
+Read these files in order:
+1. $agent_root/BRAIN.md
+2. $agent_root/AGENT.md
+3. $agent_root/SYSTEM_INSTRUCTIONS.md
+4. $agent_root/PACKAGE_MANIFEST.md
+
+Then inspect the current project, resolve its client/project scope, select one
+applicable workflow, and load only the skills, connectors, dependencies, and
+output schema required for the active task.
+EOF
+}
+
+version() {
+  awk '/^version:/ { print $2; exit }' "$agent_root/AGENT.md"
+}
+
+usage() {
+  cat <<'EOF'
+UNPS HiveForge
+
+Usage:
+  hiveforge doctor      Validate the installed agent package.
+  hiveforge bootstrap   Print the startup paths and ready-to-use boot sequence.
+  hiveforge path        Print the installation directory.
+  hiveforge version     Print the installed agent version.
+  hiveforge help        Show this help.
+EOF
+}
+
+case "${1:-help}" in
+  doctor) doctor ;;
+  bootstrap) bootstrap ;;
+  path) printf '%s\n' "$install_root" ;;
+  version|--version|-v) version ;;
+  help|--help|-h) usage ;;
+  *)
+    echo "Unknown command: $1" >&2
+    usage >&2
+    exit 2
+    ;;
+esac
+

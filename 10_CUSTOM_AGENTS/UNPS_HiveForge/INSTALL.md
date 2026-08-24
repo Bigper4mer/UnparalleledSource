@@ -1,7 +1,33 @@
 # Install UNPS HiveForge
 
-Version: 0.3.0  
+Version: 0.3.1  
 Status: Candidate
+
+## One-command installation
+
+macOS, Linux, or WSL:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/main/install.sh | sh
+```
+
+The installer places the package under the user's local data directory, creates a `hiveforge` launcher under `~/.local/bin`, and validates all 13 required agent files.
+
+After installation:
+
+```bash
+hiveforge doctor
+hiveforge bootstrap
+```
+
+Custom target:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/main/install.sh \
+  | sh -s -- --target /absolute/path/to/hiveforge
+```
+
+Existing installations are never silently overwritten. Use `--force` to preserve the existing installation as a timestamped backup before installing.
 
 ## Option A — Connected Drive deployment
 

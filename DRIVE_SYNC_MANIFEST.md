@@ -47,6 +47,11 @@ The mirror also includes the public-safe files referenced by the package:
 - Workspace hygiene workflow
 - Prompt Database Agent acceptance evaluation
 
+## Distribution tooling
+
+- `install.sh` — non-root, one-command installer with atomic staging and recoverable backups
+- `bin/hiveforge` — launcher for validation, version, path, and bootstrap commands
+
 ## Validation
 
 | Check | Result |
@@ -73,4 +78,3 @@ The GitHub mirror does not contain:
 ## Synchronization rule
 
 Material internal changes should be reviewed for public suitability before GitHub synchronization. Do not automate blind publication from Drive. Update package versions and changelogs when behavior changes, then re-run the credential and privacy scan before publishing.
-

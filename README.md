@@ -4,7 +4,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-0.3.0-C35BA3?style=for-the-badge)](#release-status)
+[![Version](https://img.shields.io/badge/version-0.3.1-C35BA3?style=for-the-badge)](#release-status)
 [![Status](https://img.shields.io/badge/status-candidate-4B0F4E?style=for-the-badge)](#release-status)
 [![Architecture](https://img.shields.io/badge/architecture-model--agnostic-00D4AA?style=for-the-badge)](#architecture)
 [![Built by UNPS](https://img.shields.io/badge/built%20by-Unparalleled%20Source-080210?style=for-the-badge)](https://unparalleledsource.com)
@@ -133,6 +133,20 @@ A production-oriented HiveForge agent should contain or reference:
 
 This repository now includes the complete public-safe HiveForge agent package and the shared files required to deploy it. The live UNPS Drive library remains canonical for internal operations and future synchronization.
 
+### One-command install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/main/install.sh | sh
+```
+
+Then print the ready-to-use agent boot sequence:
+
+```bash
+hiveforge bootstrap
+```
+
+The installer uses no root privileges, validates all 13 package files, and refuses to overwrite an existing installation unless `--force` is explicitly supplied.
+
 1. Open the [complete HiveForge package](10_CUSTOM_AGENTS/UNPS_HiveForge/README.md).
 2. Follow [INSTALL.md](10_CUSTOM_AGENTS/UNPS_HiveForge/INSTALL.md).
 3. Load the four-file startup set.
@@ -151,9 +165,11 @@ This repository now includes the complete public-safe HiveForge agent package an
 09_TESTS_EVALS/                     Acceptance and regression gates
 10_CUSTOM_AGENTS/UNPS_HiveForge/    Complete 13-file agent package
 assets/                             Branded README imagery
+bin/                                HiveForge launcher
 docs/                               Public architecture and roadmap
 examples/                           Portable manifest example
 schemas/                            Machine-readable package contract
+install.sh                          One-command installer
 ```
 
 See [DRIVE_SYNC_MANIFEST.md](DRIVE_SYNC_MANIFEST.md) for the published scope and source-of-truth policy.
@@ -170,7 +186,7 @@ See [DRIVE_SYNC_MANIFEST.md](DRIVE_SYNC_MANIFEST.md) for the published scope and
 
 ## Release status
 
-**Current release:** `0.3.0`<br>
+**Current release:** `0.3.1`<br>
 **Maturity:** Candidate
 
 The framework is deployment-ready for controlled UNPS use. Production promotion remains gated on repeated acceptance passes across materially different workflows. Optional repository-intelligence integrations remain Candidate until their live promotion tests succeed.

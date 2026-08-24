@@ -86,7 +86,7 @@ This index is the canonical routing map for reusable prompts, skills, workflows,
 
 ### Custom Agent builds
 
-- `UNPS_HiveForge` — deployment-ready Candidate, v0.3.0; technical role: Prompt Database Agent
+- `UNPS_HiveForge` — deployment-ready Candidate, v0.3.1; technical role: Prompt Database Agent
 - `Government_Capture_Agent` — Candidate shell
 - `Research_Intelligence_Agent` — Candidate shell
 - `Coding_Agent` — Candidate shell

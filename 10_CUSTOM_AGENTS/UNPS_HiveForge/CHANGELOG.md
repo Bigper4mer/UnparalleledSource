@@ -2,6 +2,18 @@
 
 All material package changes are recorded here. Dates use `YYYY-MM-DD`.
 
+## 0.3.1 — 2026-08-24
+
+### Added
+
+- One-command, non-root installer for macOS, Linux, and WSL.
+- `hiveforge` launcher with `doctor`, `bootstrap`, `path`, and `version` commands.
+- Atomic staging, package validation, safe overwrite refusal, and recoverable backups.
+
+### Changed
+
+- GitHub is now a directly installable public-safe distribution, while Drive remains the canonical internal source.
+
 ## 0.3.0 — 2026-08-24
 
 ### Added
