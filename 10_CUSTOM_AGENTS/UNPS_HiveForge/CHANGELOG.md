@@ -2,6 +2,33 @@
 
 All material package changes are recorded here. Dates use `YYYY-MM-DD`.
 
+## 0.5.0 — 2026-08-24
+
+### Added
+
+- Production release gate with version consistency, public/private boundary checks, secret scanning, install matrix, dashboard smoke test, Graphify fixture test, fallback validation, package export/import round trip, and release artifact checksum generation.
+- Dependency maturity manifest with `CORE`, `CANDIDATE`, `STAGED`, `REFERENCE`, `RESTRICTED`, and `DEPRECATED` states.
+- Staging profiles for Composio and LangGraph.
+- ToolJet Agent & Capability Registry implementation contract.
+- Media ingestion policy preferring `yt-dlp` and keeping `youtube-dl` as compatibility reference only.
+- Three-workflow production acceptance evidence.
+
+### Changed
+
+- Synced package version to BRAIN v0.5-era behavior.
+- Installer now supports immutable release refs and release-artifact checksum verification.
+- Public package metadata distinguishes core Production readiness from independently staged/candidate optional capabilities.
+
+### Security
+
+- Added repository secret scan and public/private forbidden-term gate.
+- Added explicit public distribution license notice preserving Unparalleled Source rights unless a separate license is granted.
+- Release archives include SHA-256 checksums.
+
+### Status
+
+Release Candidate until mandatory CI jobs pass on the release branch and the immutable `v0.5.0` tag is created.
+
 ## 0.4.0 — 2026-08-24
 
 ### Added
