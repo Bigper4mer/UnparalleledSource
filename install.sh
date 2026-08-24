@@ -12,12 +12,12 @@ usage() {
 Install UNPS HiveForge.
 
 Usage:
-  install.sh [--target DIRECTORY] [--bin-dir DIRECTORY] [--ref BRANCH_OR_TAG] [--force]
+  install.sh [--target DIRECTORY] [--bin-dir DIRECTORY] [--ref BRANCH] [--force]
 
 Options:
   --target   Installation directory.
   --bin-dir  Directory for the hiveforge launcher.
-  --ref      Git branch or tag to install. Default: main.
+  --ref      Git branch to install. Default: main.
   --force    Preserve the existing installation as a timestamped backup, then install.
   --help     Show this help.
 EOF
@@ -169,4 +169,3 @@ Next:
 If the launcher directory is not on PATH:
   $INSTALL_ROOT/bin/hiveforge bootstrap
 EOF
-
