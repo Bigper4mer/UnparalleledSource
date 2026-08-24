@@ -1,7 +1,7 @@
 # Install UNPS HiveForge
 
 Version: 0.5.0  
-Status: Release Candidate
+Status: Production
 
 ## Production install
 
