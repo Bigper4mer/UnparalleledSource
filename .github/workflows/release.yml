@@ -32,12 +32,14 @@ jobs:
           version=$(awk '/^version:/ { print $2; exit }' 10_CUSTOM_AGENTS/UNPS_HiveForge/AGENT.md)
           test -n "$version"
           grep -qx 'status: production' <(grep '^status:' 10_CUSTOM_AGENTS/UNPS_HiveForge/AGENT.md)
+          test -s "docs/RELEASE_NOTES_v${version}.md"
           echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
           echo "RELEASE_TAG=v$version" >> "$GITHUB_ENV"
           echo "RELEASE_SHA=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_ENV"
       - name: Re-run deterministic release checks
         run: |
           python scripts/production_gate.py
+          sh tests/onboarding_cli_smoke.sh
           sh tests/package_export_import.sh
           python tests/dashboard_smoke.py
           sh tests/fallback_without_graphify.sh
@@ -68,6 +70,7 @@ jobs:
         run: |
           set -euo pipefail
           archive="dist/unps-hiveforge-${RELEASE_TAG}.tar.gz"
+          notes="docs/RELEASE_NOTES_v${RELEASE_VERSION}.md"
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             echo "Release $RELEASE_TAG already exists; verifying assets."
             gh release view "$RELEASE_TAG"
@@ -77,5 +80,5 @@ jobs:
               dist/SHA256SUMS \
               --target "$RELEASE_SHA" \
               --title "UNPS HiveForge $RELEASE_TAG" \
-              --notes-file docs/RELEASE_NOTES_v0.5.0.md
+              --notes-file "$notes"
           fi
