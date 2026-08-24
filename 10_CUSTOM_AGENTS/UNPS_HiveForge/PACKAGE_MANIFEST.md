@@ -3,7 +3,7 @@
 id: UNPS-AGENT-PROMPTDB-001  
 name: UNPS HiveForge  
 role: Prompt Database Agent  
-version: 0.5.0  
+version: 0.6.0  
 status: production  
 owner: Unparalleled Source  
 updated: 2026-08-24
@@ -21,7 +21,7 @@ Load in this order:
 3. `SYSTEM_INSTRUCTIONS.md`
 4. `PACKAGE_MANIFEST.md`
 
-Do not preload every referenced skill, workflow, connector definition, dependency, or output schema.
+Then load a validated user working profile when relevant, resolve project/client scope, and hydrate only the workflow-specific assets needed for the task.
 
 ## Package files
 
@@ -45,6 +45,11 @@ Do not preload every referenced skill, workflow, connector definition, dependenc
 
 - Library governance: `00_README/README.md` and `00_README/LIBRARY_INDEX.md`
 - Bootstrap: `00_README/UNPS_AGENT_BOOTSTRAP.md`
+- User onboarding: `docs/GETTING_STARTED.md` and `docs/USER_INTAKE.md`
+- Workflow selection: `docs/WORKFLOW_GUIDE.md`
+- Command reference: `docs/COMMAND_REFERENCE.md`
+- Tool/capability guide: `docs/TOOLING_GUIDE.md`
+- ToolJet setup: `docs/TOOLJET_SETUP.md`
 - File routing: `03_SKILLS/Document_Creation/Information_Architecture/FILE_ROUTING_AND_WORKSPACE_STANDARD.md`
 - Continuous learning: `03_SKILLS/Document_Creation/Learning_Growth/CONTINUOUS_LEARNING_AND_GROWTH_LOOP.md`
 - Model routing: `04_MCP_CONNECTORS/Models_Harnesses/MODEL_HARNESS_ROUTER.md`
@@ -58,13 +63,13 @@ Do not preload every referenced skill, workflow, connector definition, dependenc
 - Composio staging: `06_DEPENDENCIES/External_Services/Agent_Orchestration/COMPOSIO_STAGING.md`
 - LangGraph staging: `06_DEPENDENCIES/External_Services/Agent_Orchestration/LANGGRAPH_STAGING.md`
 - Acceptance evaluation: `09_TESTS_EVALS/Prompt_Tests/PROMPT_DATABASE_AGENT_ACCEPTANCE_EVAL.md`
-- Production evidence: `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.5.0.md`
+- v0.6.0 production evidence: `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md`
 
 ## Integrity rules
 
 - The shared library remains canonical; this package composes it by reference.
 - Package-local files may summarize routing but must not fork shared policies silently.
 - Material behavioral changes require a version bump and changelog entry.
-- HiveForge v0.5.0 Production status is tied to its recorded release evidence and green Production Gate; material behavioral changes require a new candidate/release-validation cycle before the changed version is promoted.
+- HiveForge v0.6.0 Production status is tied to its recorded release evidence and green Production Gate.
 - Credentials, access tokens, private keys, regulated data, client/opportunity records, and private connector exports never belong in the public package.
 - Optional dependencies remain optional unless their own promotion gate explicitly moves them to CORE.
