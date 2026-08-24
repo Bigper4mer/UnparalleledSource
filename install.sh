@@ -2,7 +2,7 @@
 set -eu
 
 REPOSITORY="Bigper4mer/UnparalleledSource"
-REF="${HIVEFORGE_REF:-main}"
+REF="${HIVEFORGE_REF:-v0.5.0}"
 INSTALL_ROOT="${HIVEFORGE_HOME:-${XDG_DATA_HOME:-${HOME}/.local/share}/unps-hiveforge}"
 BIN_ROOT="${HIVEFORGE_BIN_DIR:-${HOME}/.local/bin}"
 FORCE=0
@@ -12,14 +12,17 @@ usage() {
 Install UNPS HiveForge.
 
 Usage:
-  install.sh [--target DIRECTORY] [--bin-dir DIRECTORY] [--ref BRANCH] [--force]
+  install.sh [--target DIRECTORY] [--bin-dir DIRECTORY] [--ref TAG_OR_BRANCH] [--force]
 
 Options:
   --target   Installation directory.
   --bin-dir  Directory for the hiveforge launcher.
-  --ref      Git branch to install. Default: main.
+  --ref      Git tag or branch to install. Default: v0.5.0.
   --force    Preserve the existing installation as a timestamped backup, then install.
   --help     Show this help.
+
+Environment:
+  HIVEFORGE_SHA256  Optional expected SHA-256 for the downloaded source archive.
 EOF
 }
 
@@ -72,6 +75,25 @@ cleanup() {
 }
 trap cleanup EXIT HUP INT TERM
 
+verify_archive_sha256() {
+  archive_path=$1
+  expected=$2
+  if command -v sha256sum >/dev/null 2>&1; then
+    actual=$(sha256sum "$archive_path" | awk '{print $1}')
+  elif command -v shasum >/dev/null 2>&1; then
+    actual=$(shasum -a 256 "$archive_path" | awk '{print $1}')
+  else
+    echo "HIVEFORGE_SHA256 was supplied but no SHA-256 utility is available." >&2
+    exit 1
+  fi
+  [ "$actual" = "$expected" ] || {
+    echo "HiveForge archive checksum mismatch." >&2
+    echo "Expected: $expected" >&2
+    echo "Actual:   $actual" >&2
+    exit 1
+  }
+}
+
 if [ -n "${HIVEFORGE_SOURCE_DIR:-}" ]; then
   source_root=$HIVEFORGE_SOURCE_DIR
 else
@@ -92,8 +114,13 @@ else
   esac
 
   curl --proto '=https' --tlsv1.2 -fsSL \
-    "https://github.com/${REPOSITORY}/archive/refs/heads/${REF}.tar.gz" \
+    "https://github.com/${REPOSITORY}/archive/${REF}.tar.gz" \
     -o "$archive"
+
+  if [ -n "${HIVEFORGE_SHA256:-}" ]; then
+    verify_archive_sha256 "$archive" "$HIVEFORGE_SHA256"
+  fi
+
   tar -xzf "$archive" -C "$extract_root"
   set -- "$extract_root"/*
   source_root=$1
@@ -138,6 +165,7 @@ for item in \
   dashboard \
   bin \
   README.md \
+  LICENSE \
   SECURITY.md \
   DRIVE_SYNC_MANIFEST.md; do
   [ ! -e "$source_root/$item" ] || cp -R "$source_root/$item" "$staging_root/"
@@ -163,6 +191,7 @@ UNPS HiveForge installed successfully.
 
 Install:  $INSTALL_ROOT
 Launcher: $launcher
+Source:   $REF
 
 Next:
   hiveforge bootstrap
