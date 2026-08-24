@@ -16,6 +16,9 @@ install_root=$(CDPATH= cd -- "$script_dir/.." && pwd)
 agent_root="$install_root/10_CUSTOM_AGENTS/UNPS_HiveForge"
 runtime_script="$install_root/dashboard/runtime.py"
 dashboard_server="$install_root/dashboard/server.py"
+docs_root="$install_root/docs"
+examples_root="$install_root/examples"
+tooljet_compose="$install_root/tooljet/docker-compose.yml"
 
 required_files="
 README.md
@@ -41,8 +44,18 @@ doctor() {
       missing=1
     fi
   done
+  for support_file in \
+    "$docs_root/GETTING_STARTED.md" \
+    "$docs_root/COMMAND_REFERENCE.md" \
+    "$docs_root/WORKFLOW_GUIDE.md" \
+    "$examples_root/FIRST_RUN_PROMPT.md"; do
+    if [ ! -s "$support_file" ]; then
+      echo "Missing onboarding support: $support_file" >&2
+      missing=1
+    fi
+  done
   [ "$missing" -eq 0 ] || exit 1
-  echo "HiveForge doctor: PASS — 13/13 agent files present."
+  echo "HiveForge doctor: PASS — core package and guided onboarding present."
 }
 
 bootstrap() {
@@ -56,10 +69,101 @@ Read these files in order:
 3. $agent_root/SYSTEM_INSTRUCTIONS.md
 4. $agent_root/PACKAGE_MANIFEST.md
 
-Then inspect the current project, resolve its client/project scope, select one
-applicable workflow, and load only the skills, connectors, dependencies, and
-output schema required for the active task.
+Then load validated user working preferences when available, inspect the current
+project/source of truth, select one applicable workflow, and load only the
+skills, connectors, dependencies, evidence, and output schema required for the
+active task.
+
+First-time user? Run:
+  hiveforge onboard
 EOF
+}
+
+onboard() {
+  [ -s "$examples_root/FIRST_RUN_PROMPT.md" ] || {
+    echo "Missing first-run prompt: $examples_root/FIRST_RUN_PROMPT.md" >&2
+    exit 1
+  }
+  cat <<EOF
+UNPS HiveForge — First Run
+
+1. Confirm installation:
+   hiveforge doctor
+   hiveforge version
+
+2. Copy the prompt below into the AI environment where HiveForge is loaded.
+3. Let the agent perform the minimum useful intake, inspect your project, and
+   recommend the smallest useful first workflow.
+
+Full guide:
+  $docs_root/GETTING_STARTED.md
+
+----- COPY / PASTE INTO YOUR AGENT -----
+EOF
+  awk 'BEGIN{inside=0; fences=0} /^```text$/ {inside=1; fences++; next} /^```$/ && inside {exit} inside {print}' "$examples_root/FIRST_RUN_PROMPT.md"
+  cat <<'EOF'
+----- END FIRST-RUN PROMPT -----
+
+After intake, useful references:
+  hiveforge docs
+  hiveforge profile-init
+EOF
+}
+
+docs() {
+  cat <<EOF
+HiveForge documentation:
+  Start here:      $docs_root/GETTING_STARTED.md
+  User intake:     $docs_root/USER_INTAKE.md
+  Workflows:       $docs_root/WORKFLOW_GUIDE.md
+  Commands:        $docs_root/COMMAND_REFERENCE.md
+  Tools:           $docs_root/TOOLING_GUIDE.md
+  ToolJet:         $docs_root/TOOLJET_SETUP.md
+  Troubleshooting: $docs_root/TROUBLESHOOTING.md
+  Architecture:    $docs_root/ARCHITECTURE.md
+EOF
+}
+
+profile_init() {
+  if [ "$#" -gt 1 ]; then
+    echo "Usage: hiveforge profile-init [PATH]" >&2
+    exit 2
+  fi
+  default_dir="${XDG_CONFIG_HOME:-$HOME/.config}/unps-hiveforge"
+  target=${1:-"$default_dir/USER_PROFILE.md"}
+  [ -s "$examples_root/USER_PROFILE_TEMPLATE.md" ] || {
+    echo "Missing profile template." >&2
+    exit 1
+  }
+  if [ -e "$target" ]; then
+    echo "Profile already exists: $target" >&2
+    echo "HiveForge will not overwrite it." >&2
+    exit 1
+  fi
+  mkdir -p "$(dirname "$target")"
+  cp "$examples_root/USER_PROFILE_TEMPLATE.md" "$target"
+  echo "Created human-readable working profile: $target"
+  echo "Review/correct it before treating it as durable user context."
+}
+
+project_init() {
+  if [ "$#" -gt 1 ]; then
+    echo "Usage: hiveforge project-init [PATH]" >&2
+    exit 2
+  fi
+  target=${1:-"$PWD/HIVEFORGE_PROJECT.md"}
+  [ -s "$examples_root/PROJECT_INTAKE_TEMPLATE.md" ] || {
+    echo "Missing project intake template." >&2
+    exit 1
+  }
+  if [ -e "$target" ]; then
+    echo "Project intake file already exists: $target" >&2
+    echo "HiveForge will not overwrite it." >&2
+    exit 1
+  fi
+  cp "$examples_root/PROJECT_INTAKE_TEMPLATE.md" "$target"
+  echo "Created optional project intake: $target"
+  echo "If this project already has a good README/status/ADR system, reuse that instead of creating competing state."
 }
 
 version() {
@@ -91,32 +195,108 @@ dashboard() {
   python3 "$dashboard_server" "$@"
 }
 
+tooljet() {
+  action=${1:-status}
+  case "$action" in
+    status|help)
+      cat <<EOF
+ToolJet is an optional STAGED team cockpit, not a core HiveForge requirement.
+
+Evaluation stack:
+  $tooljet_compose
+
+Commands:
+  hiveforge tooljet up       Start local ToolJet evaluation on port 8080.
+  hiveforge tooljet down     Stop/remove the evaluation container.
+  hiveforge tooljet url      Print the local URL.
+  hiveforge tooljet config   Validate/show the Docker Compose configuration.
+
+Guide:
+  $docs_root/TOOLJET_SETUP.md
+EOF
+      ;;
+    url)
+      printf '%s\n' 'http://localhost:8080'
+      ;;
+    up|down|config)
+      [ -f "$tooljet_compose" ] || {
+        echo "Missing ToolJet compose file: $tooljet_compose" >&2
+        exit 1
+      }
+      command -v docker >/dev/null 2>&1 || {
+        echo "Docker is required for the optional ToolJet evaluation stack." >&2
+        exit 1
+      }
+      if ! docker compose version >/dev/null 2>&1; then
+        echo "Docker Compose v2 is required (docker compose)." >&2
+        exit 1
+      fi
+      case "$action" in
+        up)
+          docker compose -f "$tooljet_compose" up -d
+          echo "ToolJet evaluation cockpit: http://localhost:8080"
+          ;;
+        down)
+          docker compose -f "$tooljet_compose" down
+          ;;
+        config)
+          docker compose -f "$tooljet_compose" config
+          ;;
+      esac
+      ;;
+    *)
+      echo "Unknown ToolJet action: $action" >&2
+      echo "Use: hiveforge tooljet [status|up|down|url|config]" >&2
+      exit 2
+      ;;
+  esac
+}
+
 usage() {
   cat <<'EOF'
 UNPS HiveForge
 
-Usage:
-  hiveforge doctor      Validate the installed agent package.
-  hiveforge bootstrap   Print the startup paths and ready-to-use boot sequence.
-  hiveforge dashboard   Open the local Agent Command Center.
-  hiveforge run         Run a command with live dashboard telemetry.
-  hiveforge status      Show current or most recent run status.
-  hiveforge start       Start an externally instrumented run.
-  hiveforge event       Record a run phase and safe summary.
-  hiveforge finish      Complete an externally instrumented run.
-  hiveforge approval    Request an operator decision for a run.
-  hiveforge decide      Approve or deny a pending decision.
-  hiveforge connector   Report connector health.
-  hiveforge path        Print the installation directory.
-  hiveforge version     Print the installed agent version.
-  hiveforge help        Show this help.
+Getting started:
+  hiveforge onboard      Print the copy/paste first-run intake workflow.
+  hiveforge docs         Show installed documentation paths.
+  hiveforge profile-init [PATH]
+                         Create an optional human-readable user working profile.
+  hiveforge project-init [PATH]
+                         Create an optional project intake file when no good state file exists.
+
+Core:
+  hiveforge doctor       Validate package + required onboarding assets.
+  hiveforge bootstrap    Print startup paths and boot sequence.
+  hiveforge dashboard    Open the local Agent Command Center.
+  hiveforge run          Run a command with live dashboard telemetry.
+  hiveforge status       Show current or most recent run status.
+  hiveforge start        Start an externally instrumented run.
+  hiveforge event        Record a run phase and safe summary.
+  hiveforge finish       Complete an externally instrumented run.
+  hiveforge approval     Request an operator decision for a run.
+  hiveforge decide       Approve or deny a pending decision.
+  hiveforge connector    Report connector health.
+
+Optional cockpit:
+  hiveforge tooljet [status|up|down|url|config]
+                         Manage the STAGED local ToolJet evaluation stack.
+
+Utility:
+  hiveforge path         Print the installation directory.
+  hiveforge version      Print the installed agent version.
+  hiveforge help         Show this help.
 EOF
 }
 
 case "${1:-help}" in
   doctor) doctor ;;
   bootstrap) bootstrap ;;
+  onboard) onboard ;;
+  docs) docs ;;
+  profile-init) shift; profile_init "$@" ;;
+  project-init) shift; project_init "$@" ;;
   dashboard) shift; dashboard "$@" ;;
+  tooljet) shift; tooljet "$@" ;;
   run|status|start|event|finish|approval|decide|connector)
     runtime "$@"
     ;;
