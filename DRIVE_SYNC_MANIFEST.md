@@ -1,9 +1,10 @@
 # UNPS HiveForge — Drive to GitHub Sync Manifest
 
-Version: 1.0.0  
+Version: 1.1.0  
 Updated: 2026-08-24  
 GitHub repository: `Bigper4mer/UnparalleledSource`  
-Canonical internal source: `PROMPTS.UNPS`
+Canonical internal source: `PROMPTS.UNPS`  
+Target public release: `v0.5.0`
 
 ## Purpose
 
@@ -31,7 +32,7 @@ The complete 13-file HiveForge package is mirrored under:
 
 ## Published support files
 
-The mirror also includes the public-safe files referenced by the package:
+The mirror also includes public-safe files referenced by the package:
 
 - Library README, index, and bootstrap
 - File-routing and human-readable workspace standard
@@ -41,29 +42,51 @@ The mirror also includes the public-safe files referenced by the package:
 - Ponytail token-efficient engineering skill
 - Last-30-days research skill
 - Graphify codebase-intelligence skill and dependency profile
+- Dependency status manifest
+- Media-ingestion policy
+- Composio staging profile
+- LangGraph staging profile
+- ToolJet Agent & Capability Registry contract
 - Connector registry
 - Model and harness router
 - Prompt Database Agent control-plane workflow
 - Workspace hygiene workflow
 - Prompt Database Agent acceptance evaluation
+- v0.5.0 production acceptance evidence
 
 ## Distribution tooling
 
-- `install.sh` — non-root, one-command installer with atomic staging and recoverable backups
-- `bin/hiveforge` — launcher for validation, version, path, and bootstrap commands
+- `install.sh` — non-root installer supporting immutable refs and optional archive SHA-256 verification
+- `bin/hiveforge` — launcher for validation, bootstrap, dashboard, telemetry, and runtime state
 - `dashboard/` — local Agent Command Center, runtime telemetry, approvals, and connector health
+- `.github/workflows/production-gate.yml` — release-candidate CI gate
+- `.github/workflows/release.yml` — versioned archive/checksum/release automation
+- `scripts/production_gate.py` — package/version/privacy/secret regression guard
+- `scripts/build_release.sh` — deterministic public release archive + SHA256SUMS
+- `tests/` — install, dashboard, fallback, Graphify, and package round-trip smoke tests
+
+## Public/private audit
+
+The v0.5.0 release branch was reviewed for known client/opportunity identifiers and common credential/private-key patterns before release preparation. CI repeats these scans on every candidate commit.
 
 ## Validation
 
-| Check | Result |
+| Check | Release-gate expectation |
 |---|---|
 | HiveForge package files | 13/13 |
-| Total Markdown files mirrored | 29 |
-| Empty files | 0 |
+| Empty package files | 0 |
+| Version consistency | 0.5.0 across package release metadata |
 | Credential/token scan | Clear |
 | Private-key scan | Clear |
-| Client/opportunity records | Excluded |
-| Images and public documentation | Included |
+| Known client/opportunity identifiers | Excluded |
+| Linux fresh install | Required pass |
+| macOS fresh install | Required pass |
+| WSL install | Required when WSL runner is available; otherwise explicit external gate |
+| Dashboard smoke test | Required pass |
+| Graphify live fixture | Required pass for Graphify integration evidence |
+| Fallback without Graphify | Required pass |
+| Export/import round trip | Required pass |
+| Three-workflow acceptance matrix | Required pass/evidence |
 
 ## Excluded by design
 
@@ -78,4 +101,4 @@ The GitHub mirror does not contain:
 
 ## Synchronization rule
 
-Material internal changes should be reviewed for public suitability before GitHub synchronization. Do not automate blind publication from Drive. Update package versions and changelogs when behavior changes, then re-run the credential and privacy scan before publishing.
+Material internal changes must be reviewed for public suitability before GitHub synchronization. Do not automate blind publication from Drive. Update package versions and changelogs when behavior changes, then re-run credential, privacy, install, and acceptance gates before publishing.
