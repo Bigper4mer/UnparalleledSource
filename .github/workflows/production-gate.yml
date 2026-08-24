@@ -30,9 +30,24 @@ jobs:
         run: |
           sh -n install.sh
           sh -n bin/hiveforge
+          sh -n tests/onboarding_cli_smoke.sh
           sh -n tests/package_export_import.sh
           sh -n tests/fallback_without_graphify.sh
           sh -n scripts/build_release.sh
+
+  onboarding-cli:
+    name: Guided Onboarding CLI
+    needs: static-gate
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run onboarding command smoke test
+        shell: bash
+        run: sh tests/onboarding_cli_smoke.sh
 
   fresh-install:
     name: Fresh Install (${{ matrix.os }})
@@ -52,8 +67,9 @@ jobs:
             --target "$RUNNER_TEMP/hiveforge" \
             --bin-dir "$RUNNER_TEMP/bin"
           "$RUNNER_TEMP/bin/hiveforge" doctor
-          test "$("$RUNNER_TEMP/bin/hiveforge" version)" = "0.5.0"
+          test "$("$RUNNER_TEMP/bin/hiveforge" version)" = "0.6.0"
           "$RUNNER_TEMP/bin/hiveforge" bootstrap >/dev/null
+          "$RUNNER_TEMP/bin/hiveforge" onboard >/dev/null
 
   package-roundtrip:
     name: Package Export / Import (${{ matrix.os }})
@@ -90,6 +106,20 @@ jobs:
       - name: Verify optional dependency fallback
         run: sh tests/fallback_without_graphify.sh
 
+  tooljet-config:
+    name: ToolJet Compose Validation
+    needs: static-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate staged ToolJet stack
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose -f tooljet/docker-compose.yml config >/dev/null
+          grep -q "ToolJet" 10_CUSTOM_AGENTS/UNPS_HiveForge/DEPENDENCIES.md
+          grep -q "STAGED" 10_CUSTOM_AGENTS/UNPS_HiveForge/DEPENDENCIES.md
+
   graphify-live:
     name: Graphify Live Fixture
     needs: static-gate
@@ -119,7 +149,6 @@ jobs:
           edges = data.get('links', data.get('edges', []))
           assert len(data.get('nodes', [])) >= 3, data
           assert len(edges) >= 1, data
-          assert 'UserService' in Path('graphify-out/GRAPH_REPORT.md').read_text() or len(data['nodes']) >= 3
           print(f"Graphify live fixture: PASS — {len(data['nodes'])} nodes, {len(edges)} edges")
           PY
 
@@ -152,4 +181,4 @@ jobs:
           $workspace = "/mnt/$drive$rest"
           Write-Host "Resolved WSL workspace: $workspace"
           wsl -d $distro --user root -- bash -lc "test -d '$workspace'"
-          wsl -d $distro --user root -- bash -lc "cd '$workspace' && HIVEFORGE_SOURCE_DIR='$workspace' sh install.sh --target /tmp/hiveforge --bin-dir /tmp/hiveforge-bin && /tmp/hiveforge-bin/hiveforge doctor && /tmp/hiveforge-bin/hiveforge version | grep -qx 0.5.0"
+          wsl -d $distro --user root -- bash -lc "cd '$workspace' && HIVEFORGE_SOURCE_DIR='$workspace' sh install.sh --target /tmp/hiveforge --bin-dir /tmp/hiveforge-bin && /tmp/hiveforge-bin/hiveforge doctor && /tmp/hiveforge-bin/hiveforge version | grep -qx 0.6.0 && /tmp/hiveforge-bin/hiveforge onboard >/dev/null"
