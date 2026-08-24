@@ -2,7 +2,7 @@
 set -eu
 
 REPOSITORY="Bigper4mer/UnparalleledSource"
-REF="${HIVEFORGE_REF:-v0.5.0}"
+REF="${HIVEFORGE_REF:-v0.6.0}"
 INSTALL_ROOT="${HIVEFORGE_HOME:-${XDG_DATA_HOME:-${HOME}/.local/share}/unps-hiveforge}"
 BIN_ROOT="${HIVEFORGE_BIN_DIR:-${HOME}/.local/bin}"
 FORCE=0
@@ -17,7 +17,7 @@ Usage:
 Options:
   --target   Installation directory.
   --bin-dir  Directory for the hiveforge launcher.
-  --ref      Git tag or branch to install. Default: v0.5.0.
+  --ref      Git tag or branch to install. Default: v0.6.0.
   --force    Preserve the existing installation as a timestamped backup, then install.
   --help     Show this help.
 
@@ -131,6 +131,8 @@ for required_path in \
   "10_CUSTOM_AGENTS/UNPS_HiveForge/AGENT.md" \
   "10_CUSTOM_AGENTS/UNPS_HiveForge/SYSTEM_INSTRUCTIONS.md" \
   "10_CUSTOM_AGENTS/UNPS_HiveForge/PACKAGE_MANIFEST.md" \
+  "docs/GETTING_STARTED.md" \
+  "examples/FIRST_RUN_PROMPT.md" \
   "bin/hiveforge"; do
   [ -f "$source_root/$required_path" ] || {
     echo "Invalid HiveForge source: missing $required_path" >&2
@@ -163,6 +165,7 @@ for item in \
   examples \
   docs \
   dashboard \
+  tooljet \
   bin \
   README.md \
   LICENSE \
@@ -193,9 +196,12 @@ Install:  $INSTALL_ROOT
 Launcher: $launcher
 Source:   $REF
 
-Next:
-  hiveforge bootstrap
+Recommended first run:
+  hiveforge onboard
+
+Documentation:
+  hiveforge docs
 
 If the launcher directory is not on PATH:
-  $INSTALL_ROOT/bin/hiveforge bootstrap
+  $INSTALL_ROOT/bin/hiveforge onboard
 EOF
