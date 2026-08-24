@@ -13,23 +13,36 @@ All material package changes are recorded here. Dates use `YYYY-MM-DD`.
 - Media ingestion policy preferring `yt-dlp` and keeping `youtube-dl` as compatibility reference only.
 - Three-workflow production acceptance evidence.
 - Cross-platform line-ending guard for Windows/WSL compatibility.
+- Guided Getting Started path for inexperienced and experienced users.
+- Safe startup user-intake and returning-user delta-check workflow.
+- Human-readable user working-profile and project-intake templates.
+- Recommended workflow and input catalog with copy/paste starters.
+- Complete HiveForge command reference.
+- Tool/capability maturity and routing guide.
+- ToolJet setup and shared registry deployment guide.
+- Troubleshooting guide and documentation index.
+- README Mermaid visualizations for user journey, architecture, workflow lifecycle, learning loop, and ToolJet role.
 
 ### Changed
 
 - Synced package version to BRAIN v0.5-era behavior.
-- Installer now supports immutable release refs and release-artifact checksum verification.
+- Installer supports immutable release refs and release-artifact checksum verification.
 - Public package metadata distinguishes core Production readiness from independently staged/candidate optional capabilities.
-- Release automation now publishes only after the Production Gate succeeds on `main`.
+- Release automation publishes only after the Production Gate succeeds on `main`.
+- BRAIN and system instructions now explicitly support validated user working profiles, first-run intake, domain-specific experience levels, and returning-user delta checks.
+- User-level preferences are explicitly separated from project/client facts and hidden memory.
+- Production gate now requires the guided onboarding surface and checks that intake documentation includes sensitive-data boundaries.
 
 ### Security
 
 - Added repository secret scan and public/private forbidden-term gate.
 - Added explicit public distribution license notice preserving Unparalleled Source rights unless a separate license is granted.
 - Release archives include SHA-256 checksums.
+- User-intake guidance explicitly prohibits reusable storage of passwords, API keys, tokens, private keys, authentication cookies, regulated data, and unrelated sensitive personal information.
 
 ### Validation
 
-- Static/privacy/secret gate: PASS.
+- Static/privacy/secret/onboarding gate: PASS required.
 - Three-workflow acceptance evidence: PASS.
 - Fresh Linux install: PASS.
 - Fresh macOS install: PASS.
