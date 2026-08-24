@@ -1,0 +1,38 @@
+schema_version: "1.0"
+
+agent:
+  id: "example-agent"
+  name: "Example HiveForge Agent"
+  version: "0.1.0"
+  status: "experimental"
+  owner: "Unparalleled Source"
+
+startup:
+  required:
+    - BRAIN.md
+    - AGENT.md
+    - SYSTEM_INSTRUCTIONS.md
+    - PACKAGE_MANIFEST.md
+
+capabilities:
+  required: []
+  conditional: []
+
+workflows: []
+skills: []
+connectors:
+  required: []
+  optional: []
+
+dependencies:
+  required: []
+  optional: []
+
+output_schemas: []
+evaluations: []
+
+security:
+  secrets_in_package: false
+  least_privilege: true
+  public_safe: true
+
