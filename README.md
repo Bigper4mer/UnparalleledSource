@@ -5,7 +5,7 @@
 <div align="center">
 
 [![Version](https://img.shields.io/badge/version-0.5.0-C35BA3?style=for-the-badge)](#release-status)
-[![Status](https://img.shields.io/badge/status-release%20candidate-4B0F4E?style=for-the-badge)](#release-status)
+[![Status](https://img.shields.io/badge/status-production-00D4AA?style=for-the-badge)](#release-status)
 [![Architecture](https://img.shields.io/badge/architecture-model--agnostic-00D4AA?style=for-the-badge)](#architecture)
 [![Built by UNPS](https://img.shields.io/badge/built%20by-Unparalleled%20Source-080210?style=for-the-badge)](https://unparalleledsource.com)
 
@@ -112,7 +112,7 @@ Everything else loads only when the active workflow requires it.
 
 ## Agent package contract
 
-A production-oriented HiveForge agent should contain or reference:
+A production HiveForge agent contains or references:
 
 | File | Responsibility |
 |---|---|
@@ -133,21 +133,19 @@ A production-oriented HiveForge agent should contain or reference:
 
 HiveForge keeps optional technology separate from core behavior. Dependencies are classified as `CORE`, `CANDIDATE`, `STAGED`, `REFERENCE`, `RESTRICTED`, or `DEPRECATED`.
 
-- **Graphify** — Candidate repository intelligence.
+- **Graphify** — Candidate repository intelligence with live v0.9.48 integration evidence.
 - **yt-dlp** — Candidate media ingestion; `youtube-dl` is reference/compatibility only.
 - **Composio** — Staged external action/tool layer.
 - **LangGraph** — Staged durable orchestration.
 - **ToolJet** — Staged human operations cockpit and Agent & Capability Registry.
 
-The core package must remain usable when any optional Candidate/Staged capability is absent.
+The core package remains usable when any optional Candidate/Staged capability is absent.
 
 ## Quick start
 
 This repository includes the public-safe HiveForge agent package and shared files required to deploy it. The live UNPS Drive library remains canonical for internal operations and future synchronization.
 
-### Immutable release install
-
-After the `v0.5.0` tag is published:
+### Immutable production install
 
 ```bash
 HIVEFORGE_REF=v0.5.0 \
@@ -178,19 +176,19 @@ The installer uses no root privileges, validates all 13 package files, and refus
 
 ## Production gate
 
-The release candidate is tested by `.github/workflows/production-gate.yml` for:
+HiveForge v0.5.0 passed `.github/workflows/production-gate.yml` across:
 
-- package and version consistency;
+- package, version, and status consistency;
 - public/private boundary and secret scanning;
 - fresh Linux and macOS installs;
-- WSL install validation when WSL is available on the Windows runner;
+- fresh WSL/Ubuntu install on the Windows runner;
 - dashboard health endpoint;
-- Graphify live fixture extraction;
+- Graphify v0.9.48 live fixture extraction and clustering;
 - fallback behavior with Graphify absent;
-- package export/import round trip;
+- package export/import round trips on Linux and macOS;
 - three-workflow acceptance evidence.
 
-The tag/release workflow builds a versioned archive and SHA-256 checksum file. A tag is not considered Production unless all mandatory gates are green.
+The release workflow publishes the immutable `v0.5.0` tag only from a successful Production Gate on `main`, then builds a versioned archive and SHA-256 checksum file.
 
 ## Repository layout
 
@@ -227,10 +225,10 @@ See [DRIVE_SYNC_MANIFEST.md](DRIVE_SYNC_MANIFEST.md) for the published scope and
 
 ## Release status
 
-**Target release:** `0.5.0`  
-**Current maturity:** Release Candidate
+**Current release:** `0.5.0`  
+**Current maturity:** Production
 
-Production is reached only after mandatory release-gate checks pass and the immutable `v0.5.0` tag is created. Optional integrations can remain Candidate/Staged without blocking the core package when their absence is handled safely.
+HiveForge v0.5.0 is the tested Production baseline. Material behavioral changes require a new version and a fresh release-gate cycle. Optional integrations retain their independent maturity states.
 
 ## Public/private boundary
 
