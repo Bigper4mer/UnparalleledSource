@@ -3,7 +3,7 @@
 id: UNPS-AGENT-PROMPTDB-001  
 name: UNPS HiveForge  
 role: Prompt Database Agent  
-version: 0.5.0  
+version: 0.6.0  
 status: production  
 organization: Unparalleled Source  
 updated: 2026-08-24
@@ -78,7 +78,7 @@ Do not globalize a one-off correction. Growth means fewer repeated mistakes, les
 
 ## Production evidence
 
-HiveForge v0.5.0 earned Production status through the repository Production Gate: version/privacy/secret checks, three-workflow acceptance evidence, fresh Linux/macOS/WSL installs, dashboard smoke testing, live Graphify integration testing, fallback-without-Graphify validation, and package export/import round trips.
+HiveForge v0.6.0 is the guided-onboarding production line. Its release gate extends the v0.5.0 control-plane tests with executable onboarding commands, user/profile/project intake behavior, documentation integrity, ToolJet Compose validation, and the same cross-platform install/dashboard/Graphify/fallback/export-import regressions.
 
 Optional capabilities retain their own maturity states and are not promoted merely because the core HiveForge package is Production.
 
