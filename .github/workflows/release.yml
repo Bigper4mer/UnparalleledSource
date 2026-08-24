@@ -1,0 +1,48 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build checksum release artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=$(awk '/^version:/ { print $2; exit }' 10_CUSTOM_AGENTS/UNPS_HiveForge/AGENT.md)
+          test "$GITHUB_REF_NAME" = "v$version"
+      - name: Run deterministic gate
+        run: python scripts/production_gate.py
+      - name: Run package round-trip
+        run: sh tests/package_export_import.sh
+      - name: Run dashboard smoke
+        run: python tests/dashboard_smoke.py
+      - name: Run fallback test
+        run: sh tests/fallback_without_graphify.sh
+      - name: Build release archive and SHA256SUMS
+        run: sh scripts/build_release.sh
+      - name: Verify SHA256SUMS
+        run: |
+          cd dist
+          sha256sum -c SHA256SUMS
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/unps-hiveforge-${GITHUB_REF_NAME}.tar.gz \
+            dist/SHA256SUMS \
+            --title "UNPS HiveForge $GITHUB_REF_NAME" \
+            --notes-file docs/RELEASE_NOTES_v0.5.0.md
