@@ -6,9 +6,32 @@
 **Status:** Production  
 **Canonical workspace:** `PROMPTS.UNPS`
 
+## New user start
+
+Install and verify:
+
+```bash
+HIVEFORGE_REF=v0.5.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.5.0/install.sh | sh
+
+hiveforge doctor
+hiveforge version
+hiveforge bootstrap
+```
+
+Then follow the repository's guided onboarding:
+
+- [`docs/GETTING_STARTED.md`](../../docs/GETTING_STARTED.md) — discovery → install → intake → first task
+- [`docs/USER_INTAKE.md`](../../docs/USER_INTAKE.md) — safe user/profile learning
+- [`docs/WORKFLOW_GUIDE.md`](../../docs/WORKFLOW_GUIDE.md) — recommended workflows and inputs
+- [`docs/COMMAND_REFERENCE.md`](../../docs/COMMAND_REFERENCE.md) — complete shell/runtime command reference
+- [`docs/TOOLING_GUIDE.md`](../../docs/TOOLING_GUIDE.md) — tools, dependencies, maturity and routing
+- [`docs/TOOLJET_SETUP.md`](../../docs/TOOLJET_SETUP.md) — optional shared team cockpit
+- [`examples/FIRST_RUN_PROMPT.md`](../../examples/FIRST_RUN_PROMPT.md) — copy/paste first-run prompt
+
 ## What it does
 
-HiveForge performs the Prompt Database Agent role while presenting a stronger UNPS product identity. It keeps the UNPS Agent Engineering Library useful as a living operating system, inventories and normalizes reusable assets, prevents duplication, routes project files correctly, composes specialized Custom Agent packages, applies evaluation gates, and promotes only patterns proven through real UNPS work.
+HiveForge performs the Prompt Database Agent role while presenting a stronger UNPS product identity. It keeps the UNPS Agent Engineering Library useful as a living operating system, inventories and normalizes reusable assets, prevents duplication, routes project files correctly, composes specialized Custom Agent packages, applies evaluation gates, and promotes only patterns proven through real work.
 
 Public framework: [github.com/Bigper4mer/UnparalleledSource](https://github.com/Bigper4mer/UnparalleledSource)
 
@@ -19,15 +42,31 @@ BRAIN.md
   → AGENT.md
   → SYSTEM_INSTRUCTIONS.md
   → PACKAGE_MANIFEST.md
+  → validated user/project context
   → task-specific workflow
   → required skills/connectors/dependencies/schema
 ```
 
-Only the first four files belong in normal startup context. Everything else loads through progressive disclosure.
+Only the first four package files belong in normal startup context. Everything else loads through progressive disclosure.
+
+## Recommended first-run behavior
+
+A new HiveForge user should be guided through:
+
+```mermaid
+flowchart LR
+    A[Verify package] --> B[Learn working preferences]
+    B --> C[Inspect current project]
+    C --> D[Identify source of truth]
+    D --> E[Recommend workflow]
+    E --> F[Execute one real task]
+    F --> G[Verify]
+    G --> H[Capture validated learning]
+```
+
+User-level preferences and project/client facts remain separate. Secrets and sensitive personal information do not belong in reusable profile or learning files.
 
 ## Agent Command Center
-
-The public distribution includes a localhost-only operational dashboard for instrumented HiveForge runs:
 
 ```bash
 hiveforge dashboard
@@ -57,7 +96,7 @@ It reports run status, elapsed time, heartbeat, pending approvals, recent runs, 
 
 ```text
 request
-  → resolve client/project scope
+  → resolve user/project/client scope
   → inspect existing state
   → classify task and depth
   → retrieve minimum evidence
@@ -65,7 +104,7 @@ request
   → execute with authorized tools
   → verify
   → route and document
-  → capture durable learning
+  → capture durable learning at the correct scope
 ```
 
 ## Capability maturity
@@ -103,17 +142,6 @@ HiveForge v0.5.0 earned Production status through the automated `.github/workflo
 - three-workflow acceptance evidence.
 
 Optional capabilities can remain Candidate/Staged without blocking the core package when fallback behavior is verified.
-
-## Distribution
-
-For the immutable release tag:
-
-```bash
-HIVEFORGE_REF=v0.5.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.5.0/install.sh | sh
-```
-
-Release artifacts are accompanied by SHA-256 checksums.
 
 ---
 
