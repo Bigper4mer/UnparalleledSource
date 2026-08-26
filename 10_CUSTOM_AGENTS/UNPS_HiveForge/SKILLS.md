@@ -7,6 +7,8 @@ Status: Candidate
 
 Resolve the task first, then load only the smallest skill set that covers it. A folder reference is not permission to hydrate every file inside that folder.
 
+For every agent run, record a bounded capability snapshot that distinguishes what was discoverable, selected, configured, and actually executed. Availability is not evidence of use. Secrets and private connector configuration never belong in that snapshot.
+
 ## Core routing skills
 
 | Trigger | Canonical skill | Requirement |

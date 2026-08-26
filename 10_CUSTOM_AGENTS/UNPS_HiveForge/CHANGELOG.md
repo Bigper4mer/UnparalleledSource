@@ -2,6 +2,35 @@
 
 All material package changes are recorded here. Dates use `YYYY-MM-DD`.
 
+## 0.7.0 — 2026-08-26
+
+### Added
+
+- Traceable task lifecycle from source intake and execution planning through capability routing, live telemetry, approval, verification, and delivery.
+- Capability-selection snapshot contract so a run can distinguish available, selected, and actually used skills, tools, connectors, and MCPs.
+- Public-safe v0.7.0 acceptance evidence and release notes.
+- Copy-ready deliverable requirement for completed agent work.
+
+### Changed
+
+- The README now presents the v0.7.0 agent-operations workflow and current installation path.
+- Local Command Center version and release metadata are synchronized at v0.7.0.
+- The Prompt Database Agent Control Plane now defines queue, heartbeat, approval, completion, and deliverable states.
+
+### Security
+
+- Public artifacts exclude private deployment configuration, user profiles, client and pursuit records, correspondence, connector exports, and credentials.
+- Consequential writes remain staged until a human approves them.
+
+### Validation
+
+- Static, privacy, secret, install, onboarding, local dashboard, fallback, Graphify, and package round-trip checks remain release gates.
+- v0.7.0 acceptance evidence is recorded in `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.7.0.md`.
+
+### Status
+
+Production.
+
 ## 0.6.0 — 2026-08-24
 
 ### Added

@@ -1,15 +1,15 @@
 # Install UNPS HiveForge
 
-Version: 0.6.0  
+Version: 0.7.0
 Status: Production
 
 ## Production install
 
-For the immutable v0.6.0 release tag:
+For the immutable v0.7.0 release tag:
 
 ```bash
-HIVEFORGE_REF=v0.6.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh | sh
+HIVEFORGE_REF=v0.7.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.7.0/install.sh | sh
 ```
 
 The installer places the package under the user's local data directory, creates a `hiveforge` launcher under `~/.local/bin`, validates the required agent and onboarding files, and refuses to silently overwrite an existing installation.
@@ -56,8 +56,8 @@ shasum -a 256 -c SHA256SUMS
 ## Custom target
 
 ```bash
-HIVEFORGE_REF=v0.6.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh \
+HIVEFORGE_REF=v0.7.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.7.0/install.sh \
   | sh -s -- --target /absolute/path/to/hiveforge
 ```
 
@@ -111,7 +111,7 @@ Confirm that HiveForge can:
 - route a reusable correction through the learning loop;
 - fail safely when a connector, dependency, or destination is unavailable.
 
-Use `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md` for the guided-onboarding production evidence.
+Use `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.7.0.md` for the guided-onboarding production evidence.
 
 ## Optional Graphify setup
 
@@ -124,4 +124,4 @@ graphify .
 graphify cluster-only .
 ```
 
-Graphify remains a Candidate capability even when HiveForge v0.6.0 is Production. Its promotion gate is independent.
+Graphify remains a Candidate capability even when HiveForge v0.7.0 is Production. Its promotion gate is independent.

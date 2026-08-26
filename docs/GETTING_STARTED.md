@@ -30,8 +30,8 @@ HiveForge is a model-agnostic agent operating system. It does not replace your A
 ### 1. Install
 
 ```bash
-HIVEFORGE_REF=v0.6.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh | sh
+HIVEFORGE_REF=v0.7.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.7.0/install.sh | sh
 ```
 
 If the `hiveforge` command is not on your PATH, the installer prints the direct launcher path.
@@ -47,7 +47,7 @@ hiveforge path
 Expected version:
 
 ```text
-0.6.0
+0.7.0
 ```
 
 ### 3. Run guided onboarding

@@ -53,8 +53,8 @@ HiveForge refuses silent overwrite.
 To preserve the current installation as a timestamped backup and reinstall:
 
 ```bash
-HIVEFORGE_REF=v0.6.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh \
+HIVEFORGE_REF=v0.7.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.7.0/install.sh \
   | sh -s -- --force
 ```
 

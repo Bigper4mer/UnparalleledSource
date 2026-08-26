@@ -1,7 +1,7 @@
 # UNPS BRAIN.md
 
 Status: Production  
-Version: 0.6.0  
+Version: 0.7.0
 Owner: Unparalleled Source
 
 ## Purpose

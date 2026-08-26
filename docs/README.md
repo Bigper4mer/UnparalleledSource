@@ -1,6 +1,6 @@
 # HiveForge Documentation
 
-Use this page as the documentation router for HiveForge v0.6.0.
+Use this page as the documentation router for HiveForge v0.7.0.
 
 ## I am new to HiveForge
 
@@ -35,7 +35,7 @@ hiveforge onboard
 - [Architecture](ARCHITECTURE.md)
 - [Tools & capability maturity](TOOLING_GUIDE.md)
 - [Security](../SECURITY.md)
-- [v0.6.0 production evidence](../09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md)
+- [v0.7.0 production evidence](../09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.7.0.md)
 
 ## I want dashboards
 
@@ -61,6 +61,7 @@ hiveforge onboard
 
 ## Release information
 
+- [v0.7.0 release notes](RELEASE_NOTES_v0.7.0.md)
 - [v0.6.0 release notes](RELEASE_NOTES_v0.6.0.md)
 - [v0.5.0 release notes](RELEASE_NOTES_v0.5.0.md)
 - [Drive/GitHub sync manifest](../DRIVE_SYNC_MANIFEST.md)

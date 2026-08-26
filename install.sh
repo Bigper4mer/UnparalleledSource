@@ -2,7 +2,7 @@
 set -eu
 
 REPOSITORY="Bigper4mer/UnparalleledSource"
-REF="${HIVEFORGE_REF:-v0.6.0}"
+REF="${HIVEFORGE_REF:-v0.7.0}"
 INSTALL_ROOT="${HIVEFORGE_HOME:-${XDG_DATA_HOME:-${HOME}/.local/share}/unps-hiveforge}"
 BIN_ROOT="${HIVEFORGE_BIN_DIR:-${HOME}/.local/bin}"
 FORCE=0
@@ -17,7 +17,7 @@ Usage:
 Options:
   --target   Installation directory.
   --bin-dir  Directory for the hiveforge launcher.
-  --ref      Git tag or branch to install. Default: v0.6.0.
+  --ref      Git tag or branch to install. Default: v0.7.0.
   --force    Preserve the existing installation as a timestamped backup, then install.
   --help     Show this help.
 

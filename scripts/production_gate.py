@@ -9,7 +9,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "10_CUSTOM_AGENTS" / "UNPS_HiveForge"
-VERSION = "0.6.0"
+VERSION = "0.7.0"
 
 REQUIRED_PACKAGE_FILES = [
     "README.md", "BRAIN.md", "AGENT.md", "SYSTEM_INSTRUCTIONS.md",
@@ -25,7 +25,7 @@ REQUIRED_SUPPORT_FILES = [
     "06_DEPENDENCIES/External_Services/Agent_Orchestration/LANGGRAPH_STAGING.md",
     "06_DEPENDENCIES/Python/CLI_Tools/Media_Ingestion/MEDIA_INGESTION_TOOLING.md",
     "05_WORKFLOWS/Agent_Control_Plane/TOOLJET_AGENT_CAPABILITY_REGISTRY.md",
-    "09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md",
+    "09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.7.0.md",
     "docs/GETTING_STARTED.md",
     "docs/USER_INTAKE.md",
     "docs/WORKFLOW_GUIDE.md",
@@ -34,7 +34,7 @@ REQUIRED_SUPPORT_FILES = [
     "docs/TOOLJET_SETUP.md",
     "docs/TROUBLESHOOTING.md",
     "docs/README.md",
-    "docs/RELEASE_NOTES_v0.6.0.md",
+    "docs/RELEASE_NOTES_v0.7.0.md",
     "examples/FIRST_RUN_PROMPT.md",
     "examples/USER_PROFILE_TEMPLATE.md",
     "examples/PROJECT_INTAKE_TEMPLATE.md",
@@ -85,9 +85,9 @@ def check_versions() -> None:
         PACKAGE / "CHANGELOG.md": f"## {VERSION} —",
         PACKAGE / "BRAIN.md": f"Version: {VERSION}",
         ROOT / "README.md": f"version-{VERSION}",
-        ROOT / "install.sh": "v0.6.0",
-        ROOT / "dashboard" / "server.py": '"version": "0.6.0"',
-        ROOT / "dashboard" / "static" / "index.html": "HiveForge v0.6.0",
+        ROOT / "install.sh": "v0.7.0",
+        ROOT / "dashboard" / "server.py": '"version": "0.7.0"',
+        ROOT / "dashboard" / "static" / "index.html": "HiveForge v0.7.0",
     }
     for path, needle in checks.items():
         if needle not in read(path):
@@ -186,13 +186,13 @@ def check_public_boundary() -> None:
 
 
 def check_acceptance() -> None:
-    text = read(ROOT / "09_TESTS_EVALS" / "Prompt_Tests" / "PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md")
+    text = read(ROOT / "09_TESTS_EVALS" / "Prompt_Tests" / "PRODUCTION_ACCEPTANCE_MATRIX_v0.7.0.md")
     if "Critical scenarios: **PASS**" not in text:
-        fail("v0.6.0 production acceptance evidence is incomplete")
+        fail("v0.7.0 production acceptance evidence is incomplete")
     for phrase in ("Guided onboarding", "Experienced operator", "Project routing", "Fallback"):
         if phrase not in text:
             fail(f"acceptance matrix missing coverage: {phrase}")
-    print("PASS: v0.6.0 acceptance evidence")
+    print("PASS: v0.7.0 acceptance evidence")
 
 
 def check_optional_fallback() -> None:

@@ -15,7 +15,7 @@ HIVEFORGE_SOURCE_DIR="$ROOT" sh "$ROOT/install.sh" --target "$INSTALL" --bin-dir
 
 HF="$BIN/hiveforge"
 "$HF" doctor
-[ "$("$HF" version)" = "0.6.0" ]
+[ "$("$HF" version)" = "0.7.0" ]
 
 "$HF" bootstrap | grep -q "hiveforge onboard"
 "$HF" onboard > "$TMP/onboard.txt"

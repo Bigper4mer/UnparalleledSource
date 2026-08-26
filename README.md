@@ -4,7 +4,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-0.6.0-C35BA3?style=for-the-badge)](#release-status)
+[![Version](https://img.shields.io/badge/version-0.7.0-C35BA3?style=for-the-badge)](#release-status)
 [![Status](https://img.shields.io/badge/status-production-00D4AA?style=for-the-badge)](#release-status)
 [![Architecture](https://img.shields.io/badge/architecture-model--agnostic-00D4AA?style=for-the-badge)](#architecture)
 [![Built by UNPS](https://img.shields.io/badge/built%20by-Unparalleled%20Source-080210?style=for-the-badge)](https://unparalleledsource.com)
@@ -37,6 +37,26 @@ It is designed for both first-time users and experienced operators. HiveForge he
 
 HiveForge is **not** one giant system prompt and is **not** tied to one model vendor, IDE, agent harness, memory product, or tool provider.
 
+## v0.7 agent operations
+
+HiveForge v0.7.0 adds a public-safe agent execution contract around the existing portable control plane. A task can be planned, routed to the smallest relevant capabilities, observed through live local telemetry, paused for human approval, and finished as a copy-ready deliverable.
+
+```mermaid
+flowchart LR
+    A[Goal + sources] --> B[Plan]
+    B --> C[Select skills, tools, connectors]
+    C --> D[Queue run]
+    D --> E[Local or hosted worker]
+    E --> F[Heartbeat + activity]
+    F --> G{Approval needed?}
+    G -->|Yes| H[Human decision]
+    H --> E
+    G -->|No| I[Verified deliverable]
+    I --> J[Copy, download, or route]
+```
+
+The public package includes the reusable workflow, local runtime, approval boundary, release evidence, and safe examples. Private deployments retain their own authentication, CRM data, connector configuration, secrets, correspondence, and client or pursuit records.
+
 ## New here? Use this path
 
 ```mermaid
@@ -55,8 +75,8 @@ flowchart LR
 ### 1. Install
 
 ```bash
-HIVEFORGE_REF=v0.6.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh | sh
+HIVEFORGE_REF=v0.7.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.7.0/install.sh | sh
 ```
 
 ### 2. Verify
@@ -428,7 +448,7 @@ A production HiveForge agent contains or references:
 
 ## Production validation
 
-HiveForge v0.6.0 adds guided onboarding on top of the v0.5.0 hardened control plane. The release gate covers:
+HiveForge v0.7.0 adds traceable agent operations on top of the v0.6.0 guided control plane. The release gate covers:
 
 - package/version/status consistency;
 - public/private boundary and secret scanning;
@@ -439,6 +459,8 @@ HiveForge v0.6.0 adds guided onboarding on top of the v0.5.0 hardened control pl
 - Linux and macOS fresh installs;
 - WSL/Ubuntu fresh install;
 - dashboard health smoke test;
+- local run, heartbeat, approval and completion telemetry;
+- capability-selection and public/private release boundaries;
 - live Graphify `0.9.48` extraction + clustering;
 - fallback without Graphify;
 - package export/import round trips;
@@ -479,10 +501,10 @@ install.sh                          one-command installer
 
 ## Release status
 
-**Current release:** `0.6.0`  
+**Current release:** `0.7.0`
 **Current maturity:** Production
 
-HiveForge v0.6.0 is the guided-onboarding production baseline. Material behavioral changes require a new version and fresh release-gate cycle. Optional integrations retain independent maturity states.
+HiveForge v0.7.0 is the agent-operations production baseline. Material behavioral changes require a new version and fresh release-gate cycle. Optional integrations retain independent maturity states.
 
 ## Public/private boundary
 

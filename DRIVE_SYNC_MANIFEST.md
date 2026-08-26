@@ -1,10 +1,10 @@
 # UNPS HiveForge — Drive to GitHub Sync Manifest
 
-Version: 1.3.0  
-Updated: 2026-08-24  
+Version: 1.4.0
+Updated: 2026-08-26
 GitHub repository: `Bigper4mer/UnparalleledSource`  
 Canonical internal source: `PROMPTS.UNPS`  
-Production release line: `v0.6.0`
+Production release line: `v0.7.0`
 
 ## Purpose
 
@@ -30,7 +30,7 @@ The complete HiveForge package is mirrored under `10_CUSTOM_AGENTS/UNPS_HiveForg
 
 ## Guided onboarding surface
 
-The v0.6.0 public mirror also includes:
+The v0.7.0 public mirror also includes:
 
 - `docs/GETTING_STARTED.md`
 - `docs/USER_INTAKE.md`
@@ -62,12 +62,12 @@ The mirror includes public-safe shared assets referenced by the package, includi
 - `tests/` — install, onboarding, dashboard, fallback, Graphify, ToolJet-config and package round-trip checks
 - `.gitattributes` — deterministic LF line endings for Windows/WSL-sensitive files
 
-## v0.6.0 validation contract
+## v0.7.0 validation contract
 
 | Check | Requirement |
 |---|---|
 | HiveForge package files | PASS |
-| Version/status consistency | 0.6.0 / Production |
+| Version/status consistency | 0.7.0 / Production |
 | Credential/private-key scan | Clear |
 | Public/private path boundary | Clear |
 | Guided onboarding documentation | Present and linked |
@@ -76,12 +76,12 @@ The mirror includes public-safe shared assets referenced by the package, includi
 | Linux fresh install | PASS |
 | macOS fresh install | PASS |
 | WSL/Ubuntu fresh install | PASS |
-| Dashboard smoke test | PASS |
+| Dashboard run/heartbeat/approval smoke test | PASS |
 | Graphify live fixture | PASS — extraction + clustering |
 | Fallback without Graphify | PASS |
 | Export/import round trip | PASS — Linux + macOS |
 | ToolJet Compose configuration | PASS while ToolJet remains STAGED |
-| v0.6 acceptance matrix | PASS |
+| v0.7 acceptance matrix | PASS |
 
 ## Excluded by design
 

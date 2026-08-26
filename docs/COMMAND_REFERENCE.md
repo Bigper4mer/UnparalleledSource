@@ -1,6 +1,6 @@
 # HiveForge Command Reference
 
-This page documents the commands shipped with the HiveForge v0.6.0 launcher and local runtime.
+This page documents the commands shipped with the HiveForge v0.7.0 launcher and local runtime.
 
 ## Recommended first commands
 

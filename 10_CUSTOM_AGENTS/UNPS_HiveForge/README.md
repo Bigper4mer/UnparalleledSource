@@ -2,7 +2,7 @@
 
 > The Unparalleled Source agent foundry: a portable control plane for prompts, skills, workflows, connectors, dependencies, evaluations, onboarding, and deployable Custom Agents.
 
-**Version:** 0.6.0  
+**Version:** 0.7.0
 **Status:** Production  
 **Canonical workspace:** `PROMPTS.UNPS`
 
@@ -159,7 +159,7 @@ Optional capabilities do not become core requirements merely because they are av
 
 ## Production validation
 
-HiveForge v0.6.0 extends the hardened v0.5.0 control plane with guided onboarding. The production gate validates:
+HiveForge v0.7.0 extends the guided v0.6.0 control plane with traceable agent operations. The production gate validates:
 
 - package/version/status consistency;
 - public/private and secret scans;
@@ -169,6 +169,8 @@ HiveForge v0.6.0 extends the hardened v0.5.0 control plane with guided onboardin
 - ToolJet Compose configuration;
 - fresh Linux, macOS and WSL installs;
 - dashboard health smoke test;
+- run, heartbeat, approval and completion telemetry;
+- capability-selection and copy-ready delivery contracts;
 - live Graphify fixture extraction and clustering;
 - fallback without Graphify;
 - package export/import round trips;
@@ -177,8 +179,8 @@ HiveForge v0.6.0 extends the hardened v0.5.0 control plane with guided onboardin
 ## Distribution
 
 ```bash
-HIVEFORGE_REF=v0.6.0 \
-  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.6.0/install.sh | sh
+HIVEFORGE_REF=v0.7.0 \
+  curl -fsSL https://raw.githubusercontent.com/Bigper4mer/UnparalleledSource/v0.7.0/install.sh | sh
 ```
 
 Release artifacts include SHA-256 checksums.

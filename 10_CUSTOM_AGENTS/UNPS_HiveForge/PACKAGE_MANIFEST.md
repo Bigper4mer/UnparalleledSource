@@ -3,7 +3,7 @@
 id: UNPS-AGENT-PROMPTDB-001  
 name: UNPS HiveForge  
 role: Prompt Database Agent  
-version: 0.6.0  
+version: 0.7.0
 status: production  
 owner: Unparalleled Source  
 updated: 2026-08-24
@@ -63,13 +63,13 @@ Then load a validated user working profile when relevant, resolve project/client
 - Composio staging: `06_DEPENDENCIES/External_Services/Agent_Orchestration/COMPOSIO_STAGING.md`
 - LangGraph staging: `06_DEPENDENCIES/External_Services/Agent_Orchestration/LANGGRAPH_STAGING.md`
 - Acceptance evaluation: `09_TESTS_EVALS/Prompt_Tests/PROMPT_DATABASE_AGENT_ACCEPTANCE_EVAL.md`
-- v0.6.0 production evidence: `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.6.0.md`
+- v0.7.0 production evidence: `09_TESTS_EVALS/Prompt_Tests/PRODUCTION_ACCEPTANCE_MATRIX_v0.7.0.md`
 
 ## Integrity rules
 
 - The shared library remains canonical; this package composes it by reference.
 - Package-local files may summarize routing but must not fork shared policies silently.
 - Material behavioral changes require a version bump and changelog entry.
-- HiveForge v0.6.0 Production status is tied to its recorded release evidence and green Production Gate.
+- HiveForge v0.7.0 Production status is tied to its recorded release evidence and green Production Gate.
 - Credentials, access tokens, private keys, regulated data, client/opportunity records, and private connector exports never belong in the public package.
 - Optional dependencies remain optional unless their own promotion gate explicitly moves them to CORE.

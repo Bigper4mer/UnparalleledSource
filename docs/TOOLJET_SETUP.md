@@ -21,7 +21,7 @@ flowchart TD
 
 ## HiveForge local evaluation commands
 
-The v0.6.0 package includes a STAGED Docker Compose evaluation stack.
+The v0.7.0 package includes a STAGED Docker Compose evaluation stack.
 
 Check status/help:
 
